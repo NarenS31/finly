@@ -29,6 +29,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   try {
     const lesson = getLessonBySlug(slug);
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+    const ogImageUrl = new URL("/api/og", siteUrl);
+    ogImageUrl.searchParams.set("title", lesson.meta.title);
+    ogImageUrl.searchParams.set("topic", lesson.meta.topic);
+    ogImageUrl.searchParams.set("tier", lesson.meta.ageTier ?? "");
+    ogImageUrl.searchParams.set("xp", String(lesson.meta.xpReward ?? 10));
+
     return {
       title: `${lesson.meta.title} | Finly`,
       description: lesson.meta.description,
@@ -36,6 +43,20 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         title: lesson.meta.title,
         description: lesson.meta.description,
         type: "article",
+        images: [
+          {
+            url: ogImageUrl.toString(),
+            width: 1200,
+            height: 630,
+            alt: lesson.meta.title,
+          },
+        ],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: lesson.meta.title,
+        description: lesson.meta.description,
+        images: [ogImageUrl.toString()],
       },
     };
   } catch {

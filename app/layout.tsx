@@ -9,9 +9,25 @@ const manrope = Manrope({ subsets: ["latin"], variable: "--font-sans" });
 const fraunces = Fraunces({ subsets: ["latin"], variable: "--font-display" });
 
 export const metadata: Metadata = {
-  title: "Finly - Financial Literacy for Kids & Teens",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
+  title: "Finly — Learn money. Change your life.",
   description:
-    "Free global financial literacy for ages 8-17. Learn budgeting, saving, investing, and real-world money skills.",
+    "Free interactive financial education for ages 8-17. No teacher needed. Works anywhere in the world.",
+  openGraph: {
+    title: "Finly — Learn money. Change your life.",
+    description: "Free interactive financial education for ages 8-17. No teacher needed.",
+    images: [
+      {
+        url: "/api/og",
+        width: 1200,
+        height: 630,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/api/og"],
+  },
   icons: {
     icon: "/icon.svg",
   },

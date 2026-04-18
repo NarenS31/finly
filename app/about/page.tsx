@@ -1,3 +1,5 @@
+import { ContactForm } from "@/components/contact-form";
+
 export default function AboutPage() {
   return (
     <article className="mx-auto max-w-5xl space-y-8">
@@ -24,6 +26,17 @@ export default function AboutPage() {
       <section className="rounded-[32px] border border-white/60 bg-white/80 p-8 shadow-[var(--shadow-card)]">
         <h2 className="text-3xl font-bold">Built for real life</h2>
         <p className="mt-3 editorial-copy">Students learn budgeting, saving, debt awareness, and long-term planning with scenarios that mirror real choices, not abstract textbook questions.</p>
+      </section>
+
+      <section className="mx-auto w-full max-w-[560px] border-t border-[var(--border)] px-6 py-16">
+        <div className="sec-label">Get in touch</div>
+        <h2 className="mt-0 text-[26px] font-black tracking-[-0.5px] text-[var(--black)]">
+          We&apos;d love to hear from you
+        </h2>
+        <p className="mb-8 text-[15px] leading-[1.65] text-[var(--gray-500)]">
+          Teacher wanting to use Finly in your classroom? Have feedback? Found a bug? Just want to say hi? Send us a message.
+        </p>
+        <ContactForm />
       </section>
     </article>
   );

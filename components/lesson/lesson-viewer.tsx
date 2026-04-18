@@ -13,6 +13,7 @@ import { CompletionCard } from "@/components/lesson/completion-card";
 import { Finn } from "@/components/mascot/finn";
 import { useProgress } from "@/lib/hooks/use-progress";
 import { useAuth } from "@/lib/hooks/use-auth";
+import { createClient } from "@/lib/supabase/client";
 import { useAgeTierStore } from "@/lib/store/age-tier-store";
 import { useToastStore } from "@/lib/store/toast-store";
 import type { HeadingItem } from "@/lib/utils/content";
@@ -55,6 +56,7 @@ export function LessonViewer({
   const [activeHeading, setActiveHeading] = useState(headings[0]?.id ?? "");
   const { entry, setLessonProgress } = useProgress(slug);
   const { user } = useAuth();
+  const supabase = useMemo(() => createClient(), []);
   const showFinn = ageTier === "8-12" || ageTier === "both";
   const tier = useAgeTierStore((s) => s.ageTier);
   const toast = useToastStore((s) => s.show);
@@ -196,14 +198,30 @@ export function LessonViewer({
 
   const handleShare = useCallback(async () => {
     const url = window.location.href;
+    const userId = user?.id;
+
+    const trackShare = async () => {
+      if (!userId) return;
+      await supabase.from("lesson_shares").insert({
+        user_id: userId,
+        lesson_slug: slug,
+      });
+      await supabase.rpc("check_and_award_achievements", { p_user_id: userId });
+    };
+
     try {
-      if (navigator.share) await navigator.share({ title, url });
-      else await navigator.clipboard.writeText(url);
+      if (navigator.share) {
+        await navigator.share({ title, url });
+        await trackShare();
+      } else {
+        await navigator.clipboard.writeText(url);
+        await trackShare();
+      }
       toast("Link copied — share Finly with a friend.");
     } catch {
       toast("Could not copy link.");
     }
-  }, [title, toast]);
+  }, [slug, supabase, title, toast, user?.id]);
 
   const tierClass = tier === "8-12" ? "tier-foundation" : "";
 
