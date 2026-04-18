@@ -21,7 +21,7 @@ export const useCurrencyStore = create<CurrencyState>()(
       },
     }),
     {
-      name: "finpath_currency",
+      name: "finly_currency",
       partialize: (s) => ({ currency: s.currency }),
       onRehydrateStorage: () => (state) => {
         if (state && !state.currency?.code) {

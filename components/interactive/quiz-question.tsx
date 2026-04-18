@@ -48,11 +48,11 @@ export function QuizQuestion({
               onClick={() => onAnswer(i)}
               className={`min-h-11 rounded-2xl border px-4 py-3 text-left text-sm font-medium transition md:min-h-12 ${
                 showCorrect
-                  ? "motion-safe:animate-[quizPulse_0.3s_ease-out] border-[var(--color-success)] bg-[var(--color-success-light)] text-[var(--color-text-primary)]"
+                  ? "motion-safe:animate-[quizPulse_0.3s_ease-out] border-emerald-400 bg-emerald-100 text-emerald-900"
                   : showWrong
-                    ? "motion-safe:animate-[quizShake_0.4s_ease-out] border-[var(--color-error)] bg-[var(--color-error-light)] text-[var(--color-text-primary)]"
+                    ? "motion-safe:animate-[quizShake_0.4s_ease-out] border-red-400 bg-red-100 text-red-900"
                     : isPicked
-                      ? "border-[var(--color-primary)] bg-[var(--color-primary-light)]"
+                      ? "border-teal-400 bg-teal-100 text-teal-900"
                       : "border-[var(--color-border)] bg-[var(--color-bg)] hover:border-[var(--color-primary)]"
               }`}
             >

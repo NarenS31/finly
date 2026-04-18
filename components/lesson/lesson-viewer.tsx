@@ -3,8 +3,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import confetti from "canvas-confetti";
 import Link from "next/link";
-import { ArrowLeft, Share2 } from "lucide-react";
 import { motion } from "framer-motion";
+import { Icon } from "@/components/ui/icons";
 import { ProgressBar } from "@/components/lesson/progress-bar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -113,7 +113,8 @@ export function LessonViewer({
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, [headings, setLessonProgress, user]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [headings, user]);
 
   useEffect(() => {
     const scrollOk = scrollPct >= 90;
@@ -133,7 +134,7 @@ export function LessonViewer({
         particleCount: 200,
         spread: 70,
         origin: { y: 0.65 },
-        colors: ["#5c6bc0", "#26a69a", "#ff7043", "#43a047", "#fb8c00", "#3949ab"],
+        colors: ["#22c55e", "#16a34a", "#fbbf24", "#f97316", "#0a0a0a"],
       });
       setCelebrateKey((k) => k + 1);
       setCelebrateOpen(true);
@@ -170,7 +171,7 @@ export function LessonViewer({
               toast(`+${xp.xp_awarded} XP earned`);
               if (xp.leveled_up) {
                 setTimeout(() => {
-                  toast(`🎉 You leveled up to ${xp.new_level}!`);
+                  toast(`You leveled up to ${xp.new_level}!`);
                 }, 2000);
               }
             }
@@ -178,7 +179,7 @@ export function LessonViewer({
             const achievements = Array.isArray(raw) ? raw : [];
             achievements.forEach((a, i) => {
               setTimeout(() => {
-                toast(`🏆 Achievement unlocked: ${a.title}`);
+                toast(`Achievement unlocked: ${a.title}`);
               }, 3000 + i * 1500);
             });
           } catch (e) {
@@ -186,7 +187,7 @@ export function LessonViewer({
           }
         })();
       } else if (user && !lessonId) {
-        console.warn("[FinPath] Lesson not linked to database (missing lessonId). Completion saved locally only.");
+        console.warn("[Finly] Lesson not linked to database (missing lessonId). Completion saved locally only.");
       }
     });
   }, [scrollPct, answeredAll, entry?.status, setLessonProgress, user, lessonId, slug, correctCount, effectiveQuizCount, quizPercent, toast]);
@@ -198,7 +199,7 @@ export function LessonViewer({
     try {
       if (navigator.share) await navigator.share({ title, url });
       else await navigator.clipboard.writeText(url);
-      toast("Link copied — share FinPath with a friend.");
+      toast("Link copied — share Finly with a friend.");
     } catch {
       toast("Could not copy link.");
     }
@@ -211,24 +212,37 @@ export function LessonViewer({
 
   return (
     <div className="relative">
-      <div className="fixed left-0 top-0 z-[45] h-1 w-full bg-[var(--color-border)]" aria-hidden>
+      <div className="fixed left-0 top-0 z-[45] h-[3px] w-full bg-[var(--white)]" aria-hidden>
         <div
-          className="h-full bg-[var(--color-primary)] transition-[width] duration-700 ease-out"
+          className="h-full bg-[var(--green)] transition-[width] duration-700 ease-out"
           style={{ width: `${Math.min(100, scrollPct)}%` }}
         />
       </div>
 
-      <div className="mb-6 flex flex-wrap items-center gap-3 text-sm">
-        <Link
-          href="/learn"
-          className="inline-flex min-h-11 items-center gap-2 font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
-        >
-          <ArrowLeft className="h-4 w-4" /> Back to library
-        </Link>
+      <div className="mb-4 border-b border-[var(--border)] bg-[var(--white)] px-4 py-3 sm:px-6">
+        <div className="mx-auto flex max-w-[1200px] flex-wrap items-center justify-between gap-3">
+          <Link
+            href="/learn"
+            className="inline-flex min-h-11 items-center gap-2 text-[13px] font-semibold text-[var(--gray-500)] hover:text-[var(--black)]"
+          >
+            <Icon.ChevronRight className="h-4 w-4 rotate-180" aria-hidden />
+            Back to lessons
+          </Link>
+          <p className="hidden max-w-[40%] truncate text-center text-sm font-semibold text-[var(--black)] sm:block">
+            {title}{" "}
+            <span className="text-[var(--gray-400)]">· {topicLabel}</span>
+          </p>
+          <div className="flex items-center gap-2 text-sm text-[var(--gray-500)]">
+            ~{remaining} min
+            <Button type="button" variant="ghost" size="sm" className="min-h-11 px-2" onClick={handleShare} aria-label="Share">
+              <Icon.Share className="h-5 w-5" />
+            </Button>
+          </div>
+        </div>
       </div>
 
-      <div className="grid gap-10 xl:grid-cols-[minmax(220px,260px)_minmax(0,1fr)]">
-        <aside className="order-2 h-fit space-y-4 xl:sticky xl:top-24 xl:order-1">
+      <div className="grid gap-10 xl:grid-cols-[240px_minmax(0,1fr)]">
+        <aside className="order-2 h-fit space-y-4 border-[var(--border)] bg-[var(--gray-50)] xl:sticky xl:top-[58px] xl:order-1 xl:border-r xl:px-3 xl:py-6">
           {showFinn && (
             <Card className="border-[var(--color-border)] bg-[var(--color-surface)] p-4">
               <p className="text-sm font-semibold text-[var(--color-text-primary)]">Your guide</p>
@@ -238,16 +252,16 @@ export function LessonViewer({
             </Card>
           )}
           <Card className="border-[var(--color-border)] bg-[var(--color-surface)] p-4">
-            <p className="font-semibold text-[var(--color-text-primary)]">On this page</p>
+            <p className="sec-label !mb-2">In this lesson</p>
             <nav className="mt-3 grid gap-1" aria-label="Table of contents">
               {headings.map((heading) => (
                 <a
                   key={heading.id}
                   href={`#${heading.id}`}
-                  className={`rounded-xl px-3 py-2 text-sm transition ${
+                  className={`block border-l-[3px] px-4 py-2 text-[13px] transition ${
                     activeHeading === heading.id
-                      ? "bg-[var(--color-primary)] text-white"
-                      : "text-[var(--color-text-secondary)] hover:bg-[var(--color-primary-light)]"
+                      ? "border-[var(--green)] bg-[var(--green-bg)] font-bold text-[var(--green)]"
+                      : "border-transparent font-medium text-[var(--gray-500)] hover:bg-[var(--white)]"
                   }`}
                 >
                   {heading.text}
@@ -290,14 +304,13 @@ export function LessonViewer({
             transition={{ duration: 0.3 }}
             className="mb-6 rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-[var(--shadow-sm)] md:p-8"
           >
-            <div className="flex flex-wrap items-start justify-between gap-3">
+            <div className="flex flex-wrap items-start justify-between gap-3 sm:hidden">
               <div className="flex flex-wrap gap-2">
                 <Badge>{topicLabel}</Badge>
                 <Badge variant="outline">{ageTier === "both" ? "All ages" : `Ages ${ageTier}`}</Badge>
               </div>
-              <Button type="button" variant="ghost" className="btn-press" onClick={handleShare}>
-                <Share2 className="mr-2 h-4 w-4" aria-hidden />
-                Share
+              <Button type="button" variant="ghost" size="sm" className="min-h-11 px-2" onClick={handleShare} aria-label="Share">
+                <Icon.Share className="h-5 w-5" />
               </Button>
             </div>
             <h1 className="mt-4 text-3xl font-extrabold leading-tight text-[var(--color-text-primary)] md:text-4xl lg:text-5xl">
@@ -323,7 +336,7 @@ export function LessonViewer({
           <div
             className={`rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-[var(--shadow-sm)] md:p-8 ${tierClass}`}
           >
-            <div className="prose prose-zinc dark:prose-invert max-w-[720px] mx-auto prose-headings:text-[var(--color-text-primary)]">
+            <div className="prose prose-zinc dark:prose-invert mx-auto max-w-[720px] prose-headings:text-[var(--black)]">
               {children}
             </div>
           </div>

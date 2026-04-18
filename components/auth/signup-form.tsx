@@ -22,7 +22,7 @@ export function SignupForm() {
   const [guestHint] = useState(() => {
     if (typeof window === "undefined") return false;
     try {
-      const raw = localStorage.getItem("finpath_guest_progress");
+      const raw = localStorage.getItem("finly_guest_progress");
       if (!raw) return false;
       const parsed = JSON.parse(raw) as {
         state?: { guestProgress?: Record<string, unknown> };
@@ -88,7 +88,7 @@ export function SignupForm() {
       <div className="rounded-[20px] border border-[var(--color-border)] bg-[var(--color-bg)] p-4">
         <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-[var(--color-text-primary)]">
           <Sparkles className="h-4 w-4 text-[var(--color-primary)]" />
-          Create your FinPath account
+          Create your Finly account
         </div>
         <div className="space-y-3">
           <Input placeholder="Display name" value={displayName} onChange={(e) => setDisplayName(e.target.value)} required />

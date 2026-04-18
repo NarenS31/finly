@@ -15,6 +15,6 @@ export const useAgeTierStore = create<AgeTierState>()(
       ageTier: "13-17",
       setAgeTier: (ageTier) => set({ ageTier }),
     }),
-    { name: "finpath_age_tier" }
+    { name: "finly_age_tier" }
   )
 );

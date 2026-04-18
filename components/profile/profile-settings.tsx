@@ -113,7 +113,7 @@ export function ProfileSettings({
       </div>
 
       <Modal isOpen={deleteOpen} onClose={() => setDeleteOpen(false)} title="Delete account?">
-        <p>This permanently removes your FinPath account and progress.</p>
+        <p>This permanently removes your Finly account and progress.</p>
         <div className="mt-4 flex gap-2">
           <Button variant="ghost" onClick={() => setDeleteOpen(false)}>
             Cancel

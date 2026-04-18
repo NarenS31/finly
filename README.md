@@ -1,17 +1,17 @@
-# FinPath
+# Finly
 
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38bdf8?logo=tailwindcss)](https://tailwindcss.com/)
 [![Supabase](https://img.shields.io/badge/Supabase-Auth%20%2B%20Postgres-3ecf8e?logo=supabase)](https://supabase.com/)
 
-**FinPath** is a free, self-directed financial literacy platform for ages **8–17**: two age-tier tracks, lightweight **currency symbols** for calculators, interactive MDX lessons (calculators, scenarios, quizzes), optional Supabase auth with **guest → account** progress sync, and deploy targets for **Vercel**.
+**Finly** is a free, self-directed financial literacy platform for ages **8–17**: two age-tier tracks, lightweight **currency symbols** for calculators, interactive MDX lessons (calculators, scenarios, quizzes), optional Supabase auth with **guest → account** progress sync, and deploy targets for **Vercel**.
 
 > **Screenshots:** add `docs/screenshots/` images here after your first deploy (hero, `/learn`, lesson reader, profile).
 
 > **Live demo:** replace with your production URL after deployment.
 
-## Why FinPath
+## Why Finly
 
 - **Student-first:** no teacher gate, no paywall — learn on any phone or laptop.
 - **Two tracks:** Foundation (8–12) and Real World (13–17) share one brand with different tone and layout density.
@@ -43,8 +43,8 @@
 1. **Clone and install**
 
    ```bash
-   git clone <your-repo-url> finpath
-   cd finpath
+   git clone <your-repo-url> finly
+   cd finly
    npm install
    ```
 
@@ -109,7 +109,7 @@
 ## API routes
 
 - `GET /api/stats` — platform counters (falls back if Supabase unavailable).
-- `POST /api/progress` — authenticated sync of `finpath_guest_progress` from the client into `lesson_progress`.
+- `POST /api/progress` — authenticated sync of `finly_guest_progress` from the client into `lesson_progress`.
 - `POST /api/email/welcome` — sends the welcome email via Resend.
 
 ## Supabase Edge Function: streak reminder

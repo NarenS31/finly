@@ -2,9 +2,9 @@ export default function AboutPage() {
   return (
     <article className="mx-auto max-w-5xl space-y-8">
       <section className="rounded-[32px] border border-white/60 bg-white/75 p-8 shadow-[var(--shadow-card)] backdrop-blur">
-        <h1 className="text-5xl font-extrabold leading-tight">Why FinPath exists</h1>
+        <h1 className="text-5xl font-extrabold leading-tight">Why Finly exists</h1>
         <p className="mt-4 max-w-3xl editorial-copy">
-          Money decisions start early, but financial education often starts too late. FinPath gives kids and teens globally a free, self-directed way to build practical money confidence.
+          Money decisions start early, but financial education often starts too late. Finly gives kids and teens globally a free, self-directed way to build practical money confidence.
         </p>
       </section>
       <section className="grid gap-4 md:grid-cols-3">

@@ -16,11 +16,11 @@ export async function POST(req: Request) {
   const site = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
   const resend = new Resend(key);
   // TODO: Replace with your verified sender domain before production
-  // e.g. from: 'FinPath <hello@yourverifieddomain.com>'
+  // e.g. from: 'Finly <hello@yourverifieddomain.com>'
   const { error } = await resend.emails.send({
-    from: "FinPath <onboarding@resend.dev>",
+    from: "Finly <onboarding@resend.dev>",
     to: body.to,
-    subject: "You just took the first step 🎉",
+    subject: "You just took the first step",
     html: welcomeEmailHtml({ name: body.name, ctaUrl: `${site}/learn` }),
     text: welcomeEmailText({ name: body.name, ctaUrl: `${site}/learn` }),
   });

@@ -7,18 +7,19 @@ export function AgeTierToggle() {
   const setAgeTier = useAgeTierStore((s) => s.setAgeTier);
 
   return (
-    <div className="inline-flex rounded-[999px] border border-white/60 bg-white/90 p-1 text-xs shadow-sm backdrop-blur">
+    <div className="inline-flex gap-1 rounded-lg border border-[var(--border-strong)] bg-[var(--gray-50)] p-0.5">
       {(["8-12", "13-17"] as const).map((tier) => (
         <button
           key={tier}
+          type="button"
           onClick={() => setAgeTier(tier)}
-          className={`rounded-[999px] px-3 py-1.5 font-semibold transition ${
+          className={`rounded-[8px] px-2.5 py-1.5 text-xs font-bold transition ${
             ageTier === tier
-              ? "bg-[var(--color-primary)] text-white shadow-[var(--shadow-elevated)]"
-              : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
+              ? "bg-[var(--black)] text-[var(--white)]"
+              : "bg-transparent text-[var(--gray-500)] hover:text-[var(--black)]"
           }`}
         >
-          Ages {tier}
+          {tier === "8-12" ? "8–12" : "13–17"}
         </button>
       ))}
     </div>

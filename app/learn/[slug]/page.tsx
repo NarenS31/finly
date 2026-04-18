@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   try {
     const lesson = getLessonBySlug(slug);
     return {
-      title: `${lesson.meta.title} | FinPath`,
+      title: `${lesson.meta.title} | Finly`,
       description: lesson.meta.description,
       openGraph: {
         title: lesson.meta.title,
@@ -39,7 +39,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       },
     };
   } catch {
-    return { title: "Lesson | FinPath" };
+    return { title: "Lesson | Finly" };
   }
 }
 

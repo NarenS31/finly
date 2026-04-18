@@ -1,12 +1,9 @@
--- FinPath initial schema (fresh install)
+-- Finly initial schema (fresh install)
 create extension if not exists pgcrypto;
 
--- Drop legacy objects if re-running locally
-drop trigger if exists on_lesson_complete on lesson_progress;
-drop trigger if exists on_new_user on profiles;
-drop function if exists increment_lesson_count();
-drop function if exists increment_user_count();
-
+-- Drop legacy objects if re-running locally.
+-- Do not DROP TRIGGER on tables here: on a fresh DB those relations do not exist yet (42P01).
+-- CASCADE on tables removes triggers; then functions can be dropped.
 drop table if exists calculator_uses cascade;
 drop table if exists user_achievements cascade;
 drop table if exists quiz_answers cascade;
@@ -15,6 +12,9 @@ drop table if exists achievements cascade;
 drop table if exists lessons cascade;
 drop table if exists platform_stats cascade;
 drop table if exists profiles cascade;
+
+drop function if exists increment_lesson_count() cascade;
+drop function if exists increment_user_count() cascade;
 
 create table profiles (
   id uuid references auth.users on delete cascade primary key,

@@ -14,11 +14,11 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantMap: Record<Variant, string> = {
   primary:
-    "bg-[var(--color-primary)] text-white shadow-[var(--shadow-primary)] hover:brightness-[1.03] active:scale-[0.98]",
+    "bg-[var(--color-text-primary)] text-white shadow-[var(--shadow-card)] hover:opacity-90 active:scale-[0.98]",
   secondary:
-    "bg-[var(--color-secondary)] text-white shadow-[var(--shadow-md)] hover:brightness-[1.05] active:scale-[0.98]",
+    "bg-[var(--color-primary)] text-white shadow-[var(--shadow-card)] hover:opacity-90 active:scale-[0.98]",
   ghost:
-    "border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-primary)] hover:bg-[var(--color-bg)]",
+    "border-2 border-[var(--color-border)] bg-white text-[var(--color-text-primary)] hover:border-[var(--color-primary)]",
   danger: "bg-[var(--color-error)] text-white hover:brightness-[1.05] active:scale-[0.98]",
 };
 
@@ -31,7 +31,7 @@ const sizeMap: Record<Size, string> = {
 export function Button({ className, variant = "primary", size = "md", ...props }: ButtonProps) {
   const { asChild, children, type, ...restProps } = props;
   const buttonClassName = cn(
-    "btn-press inline-flex items-center justify-center gap-2 font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg)]",
+    "btn-press inline-flex items-center justify-center gap-2 font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--green)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--white)]",
     variantMap[variant],
     sizeMap[size],
     className

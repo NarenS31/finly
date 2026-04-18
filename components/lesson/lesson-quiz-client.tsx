@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { ProgressBar } from "@/components/lesson/progress-bar";
 import { Button } from "@/components/ui/button";
+import { Icon } from "@/components/ui/icons";
 import { useAuth } from "@/lib/hooks/use-auth";
 import type { ExtractedQuizQuestion } from "@/lib/utils/extract-quiz-from-mdx";
 
@@ -137,13 +138,14 @@ export function LessonQuizClient({
           <p className="mt-6 text-5xl font-extrabold tabular-nums text-[var(--color-text-primary)]">
             {displayScore} / {total}
           </p>
-          <div className="mt-4 flex justify-center gap-1 text-4xl">
-            {[1, 2, 3].map((s) => (
-              <span key={s} className={s <= stars ? "text-[var(--color-warning)]" : "text-[var(--color-border)]"}>
-                ★
-              </span>
-            ))}
-          </div>
+            <div className="mt-4 flex justify-center gap-1">
+              {[1, 2, 3].map((s) => (
+                <Icon.StarFilled
+                  key={s}
+                  className={`h-10 w-10 ${s <= stars ? "text-[#fbbf24]" : "text-[var(--gray-200)]"}`}
+                />
+              ))}
+            </div>
           <p className="mt-4 text-sm text-[var(--color-text-secondary)]">
             If this were your first lesson completion, you would earn about <strong>{xpPreview} XP</strong> (includes quiz bonuses).
           </p>
@@ -235,10 +237,10 @@ export function LessonQuizClient({
               const tone =
                 showResult && isSel
                   ? isCorrect
-                    ? "border-[var(--color-success)] bg-[var(--color-success-light)]"
-                    : "border-[var(--color-error)] bg-[var(--color-error-light)]"
+                    ? "border-emerald-400 bg-emerald-100 text-emerald-900"
+                    : "border-red-400 bg-red-100 text-red-900"
                   : isSel
-                    ? "border-[var(--color-primary)] bg-[var(--color-primary-light)]"
+                    ? "border-teal-400 bg-teal-100 text-teal-900"
                     : "border-[var(--color-border)] bg-[var(--color-bg)]";
               return (
                 <button
@@ -246,7 +248,7 @@ export function LessonQuizClient({
                   type="button"
                   disabled={revealed}
                   onClick={() => setSelected(i)}
-                  className={`min-h-[48px] rounded-2xl border px-4 py-3 text-left text-sm font-medium transition ${tone} text-[var(--color-text-primary)]`}
+                  className={`min-h-[48px] rounded-2xl border px-4 py-3 text-left text-sm font-medium transition ${tone}`}
                 >
                   {option}
                 </button>

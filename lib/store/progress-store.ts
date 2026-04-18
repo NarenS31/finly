@@ -52,6 +52,6 @@ export const useProgressStore = create<ProgressState>()(
         }
       },
     }),
-    { name: "finpath_guest_progress" }
+    { name: "finly_guest_progress" }
   )
 );

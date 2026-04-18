@@ -9,6 +9,7 @@ import { Finn } from "@/components/mascot/finn";
 import { useAgeTierStore } from "@/lib/store/age-tier-store";
 import { useCurrencyStore } from "@/lib/store/currency-store";
 import { CURRENCY_OPTIONS } from "@/lib/utils/currency-config";
+import { Icon } from "@/components/ui/icons";
 
 const topics812 = [
   { id: "needs-vs-wants", title: "Needs vs wants", blurb: "Build the pause before you spend." },
@@ -68,7 +69,9 @@ export default function OnboardingPage() {
               }}
               className="rounded-2xl border-2 border-[var(--color-border)] bg-[var(--color-surface)] p-6 text-left shadow-[var(--shadow-sm)] transition hover:border-[var(--color-primary)]"
             >
-              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[var(--color-primary-light)] text-2xl">🎧</div>
+              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[var(--green-bg)] text-[var(--green)]">
+                <Icon.BookOpen className="h-8 w-8" />
+              </div>
               <p className="mt-4 text-lg font-bold">Real World · 13–17</p>
               <p className="mt-2 text-sm text-[var(--color-text-secondary)]">Peer-level tone, sharper layouts, real stakes.</p>
             </button>

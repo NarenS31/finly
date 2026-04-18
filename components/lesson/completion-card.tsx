@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { Icon } from "@/components/ui/icons";
 import type { LessonMeta } from "@/types";
 
 export function CompletionCard({
@@ -49,30 +50,31 @@ export function CompletionCard({
             role="dialog"
             aria-modal="true"
             aria-labelledby="completion-title"
-            className="fixed inset-x-4 bottom-4 z-[70] mx-auto max-w-lg rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-[var(--shadow-lg)] md:inset-x-auto md:left-1/2 md:w-full md:-translate-x-1/2"
-            initial={{ y: 80, opacity: 0 }}
+            className="fixed inset-x-4 bottom-4 z-[70] mx-auto max-w-lg border-t-[3px] border-[var(--green)] bg-[var(--white)] p-6 shadow-[var(--shadow-lg)] md:inset-x-auto md:left-1/2 md:w-full md:-translate-x-1/2 md:rounded-t-2xl"
+            initial={{ y: 100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 80, opacity: 0 }}
+            exit={{ y: 100, opacity: 0 }}
             transition={{ type: "spring", stiffness: 320, damping: 28 }}
           >
-            <h2 id="completion-title" className="text-2xl font-bold text-[var(--color-text-primary)]">
+            <h2 id="completion-title" className="text-xl font-extrabold text-[var(--black)]">
               Lesson complete!
             </h2>
             <div className="mt-3 flex gap-1" aria-hidden>
               {[1, 2, 3].map((i) => (
-                <span
+                <Icon.StarFilled
                   key={i}
-                  className={`text-3xl transition-colors duration-200 ${i <= stars ? "text-[var(--color-warning)]" : "text-[var(--color-border)]"}`}
-                >
-                  ★
-                </span>
+                  className={`h-8 w-8 transition-opacity duration-200 ${i <= stars ? "text-[#fbbf24]" : "text-[var(--gray-200)]"}`}
+                />
               ))}
             </div>
-            <p className="mt-2 text-sm font-medium text-[var(--color-secondary)]">+{xp} XP earned</p>
+            <p className="pill-xp mt-3 inline-block">+{xp} XP</p>
             {takeaways.length > 0 && (
-              <ul className="mt-4 list-disc space-y-2 pl-5 text-sm text-[var(--color-text-secondary)]">
+              <ul className="mt-4 space-y-2">
                 {takeaways.map((t) => (
-                  <li key={t}>{t}</li>
+                  <li key={t} className="flex gap-2 text-sm text-[var(--gray-700)]">
+                    <Icon.Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--green)]" />
+                    <span>{t}</span>
+                  </li>
                 ))}
               </ul>
             )}

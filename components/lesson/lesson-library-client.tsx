@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { Compass, Search, X } from "lucide-react";
+import { Icon } from "@/components/ui/icons";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -94,7 +94,7 @@ export function LessonLibraryClient({
           </Card>
         </div>
         <div className="mt-6 flex min-h-12 items-center gap-3 rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-2">
-          <Search className="h-5 w-5 shrink-0 text-[var(--color-text-muted)]" aria-hidden />
+          <Icon.Search className="h-4 w-4 shrink-0 text-[var(--gray-400)]" aria-hidden />
           <Input
             placeholder="Search lessons…"
             className="min-h-11 border-0 bg-transparent px-0 py-2 shadow-none focus-visible:ring-0"
@@ -140,7 +140,7 @@ export function LessonLibraryClient({
               }}
               className="inline-flex min-h-9 items-center gap-1 text-sm font-semibold text-[var(--color-primary)]"
             >
-              <X className="h-4 w-4" /> Clear filters
+              <Icon.X className="h-4 w-4" /> Clear filters
             </button>
           )}
         </div>
@@ -150,7 +150,7 @@ export function LessonLibraryClient({
         <section className="space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="flex items-center gap-2">
-              <Compass className="h-5 w-5 text-[var(--color-primary)]" />
+              <Icon.BookOpen className="h-5 w-5 text-[var(--green)]" />
               <h2 className="text-2xl font-bold text-[var(--color-text-primary)]">Continue where you left off</h2>
             </div>
             {!isLoggedIn && completedGuestCount > 0 && (
@@ -182,7 +182,11 @@ export function LessonLibraryClient({
 
       {filtered.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-3xl border border-dashed border-[var(--color-border)] bg-[var(--color-surface)] px-6 py-16 text-center">
-          {ageTier === "8-12" ? <Finn /> : <Compass className="h-12 w-12 text-[var(--color-text-muted)]" />}
+          {ageTier === "8-12" ? (
+            <Finn size={48} />
+          ) : (
+            <Icon.BookOpen className="h-12 w-12 text-[var(--gray-300)]" />
+          )}
           <p className="mt-4 text-lg font-semibold text-[var(--color-text-primary)]">
             No lessons found{query ? ` for “${query}”` : ""}
           </p>

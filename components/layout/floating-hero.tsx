@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { CheckCircle2 } from "lucide-react";
+import { Finn } from "@/components/mascot/finn";
 
 const options = [
   { text: "Save it all", correct: false },
@@ -12,12 +13,36 @@ const options = [
 
 export function FloatingHero() {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.45, delay: 0.1, ease: "easeOut" }}
-      className="w-full rounded-2xl border border-[var(--color-border)] bg-white p-6 shadow-[var(--shadow-card)]"
-    >
+    <div className="relative flex flex-col items-center">
+      {/* Finn floating above the card */}
+      <motion.div
+        initial={{ opacity: 0, y: 16, scale: 0.85 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="relative z-10 -mb-5"
+      >
+        <div className="relative">
+          {/* Glow behind Finn */}
+          <div className="absolute inset-0 rounded-full bg-orange-300/40 blur-xl scale-150" />
+          <Finn size={90} className="relative drop-shadow-lg" />
+          {/* Speech bubble */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.7, y: 4 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.3, type: "spring" }}
+            className="absolute -right-2 -top-3 rounded-full bg-white px-2.5 py-1 text-xs font-bold text-[var(--color-text-primary)] shadow-md ring-1 ring-[var(--color-border)] whitespace-nowrap"
+          >
+            Let&apos;s go! 🎯
+          </motion.div>
+        </div>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.45, delay: 0.1, ease: "easeOut" }}
+        className="w-full rounded-2xl border border-[var(--color-border)] bg-white p-6 shadow-[var(--shadow-card)]"
+      >
       {/* Progress bar */}
       <div className="mb-6 flex items-center gap-3">
         <div className="flex gap-1">
@@ -60,6 +85,7 @@ export function FloatingHero() {
           </motion.div>
         ))}
       </div>
-    </motion.div>
+      </motion.div>
+    </div>
   );
 }

@@ -9,6 +9,7 @@ import { XpLevelSection } from "@/components/profile/xp-level-section";
 import { LessonHistory, type HistoryRow } from "@/components/profile/lesson-history";
 import { ProfileSettings } from "@/components/profile/profile-settings";
 import { Avatar } from "@/components/ui/avatar";
+import { StreakPill } from "@/components/profile/streak-pill";
 
 function embeddedLessonTopic(lessons: unknown): string | undefined {
   if (lessons && typeof lessons === "object" && !Array.isArray(lessons) && "topic" in lessons) {
@@ -130,11 +131,7 @@ export default async function ProfilePage() {
             </p>
           </div>
         </div>
-        {streak >= 3 && (
-          <p className="mt-4 inline-flex items-center gap-2 rounded-full border border-[var(--color-accent)] bg-[var(--color-accent-light)] px-4 py-2 text-sm font-semibold text-[var(--color-text-primary)] streak-glow">
-            🔥 {streak}-day streak
-          </p>
-        )}
+        <StreakPill streak={streak} />
       </section>
 
       <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">

@@ -78,7 +78,7 @@ export function NeedsWantsSorter() {
                 disabled={submitted}
                 className={`min-h-11 flex-1 rounded-xl border px-2 text-sm font-semibold transition ${
                   bucket[it.id] === "need"
-                    ? "border-[var(--color-primary)] bg-[var(--color-primary-light)] text-[var(--color-primary-dark)]"
+                    ? "border-teal-600 bg-teal-600 text-white"
                     : "border-[var(--color-border)] bg-[var(--color-surface)]"
                 }`}
               >
@@ -90,7 +90,7 @@ export function NeedsWantsSorter() {
                 disabled={submitted}
                 className={`min-h-11 flex-1 rounded-xl border px-2 text-sm font-semibold transition ${
                   bucket[it.id] === "want"
-                    ? "border-[var(--color-accent)] bg-[var(--color-accent-light)] text-[var(--color-text-primary)]"
+                    ? "border-amber-500 bg-amber-500 text-white"
                     : "border-[var(--color-border)] bg-[var(--color-surface)]"
                 }`}
               >

@@ -28,7 +28,7 @@ export function TopicRadarChart({ data }: { data: TopicRadarRow[] }) {
     );
   }
 
-  const primary = "var(--color-primary)";
+  const primary = "#22c55e";
 
   return (
     <div className="h-72 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4 shadow-[var(--shadow-sm)]">
