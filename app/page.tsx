@@ -29,7 +29,10 @@ export default async function HomePage() {
               currencies, and decisions that matter wherever you live.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Button asChild>
+              <Button
+                asChild
+                className="bg-[var(--color-primary)] text-white shadow-[0_12px_26px_rgba(15,118,110,0.28)] hover:brightness-110"
+              >
                 <Link href="/learn">Start learning</Link>
               </Button>
               <Button asChild variant="ghost">

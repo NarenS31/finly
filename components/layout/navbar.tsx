@@ -47,7 +47,10 @@ export function Navbar() {
           <Button asChild variant="ghost">
             <Link href="/auth/login">Login</Link>
           </Button>
-          <Button asChild>
+          <Button
+            asChild
+            className="bg-[var(--color-primary)] text-white shadow-[0_12px_26px_rgba(15,118,110,0.28)] hover:brightness-110"
+          >
             <Link href="/auth/signup">Sign Up</Link>
           </Button>
         </div>
@@ -86,7 +89,10 @@ export function Navbar() {
             <Button asChild variant="ghost">
               <Link href="/auth/login" onClick={() => setOpen(false)}>Login</Link>
             </Button>
-            <Button asChild>
+            <Button
+              asChild
+              className="bg-[var(--color-primary)] text-white shadow-[0_12px_26px_rgba(15,118,110,0.28)] hover:brightness-110"
+            >
               <Link href="/auth/signup" onClick={() => setOpen(false)}>Sign Up</Link>
             </Button>
           </div>
