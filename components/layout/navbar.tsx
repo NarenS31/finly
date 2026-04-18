@@ -13,6 +13,7 @@ export function Navbar() {
   const links = [
     { href: "/learn", label: "Learn" },
     { href: "/curriculum", label: "Curriculum" },
+    { href: "/classes", label: "Classes" },
     { href: "/about", label: "About" },
   ];
 

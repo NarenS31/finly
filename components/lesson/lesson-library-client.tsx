@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import Link from "next/link";
 import { Icon } from "@/components/ui/icons";
 import { Badge } from "@/components/ui/badge";
@@ -11,6 +11,7 @@ import { LessonCard } from "@/components/lesson/lesson-card";
 import { Finn } from "@/components/mascot/finn";
 import { useAgeTierStore } from "@/lib/store/age-tier-store";
 import { useProgressStore } from "@/lib/store/progress-store";
+import { useToastStore } from "@/lib/store/toast-store";
 import { lessonMatchesTier } from "@/lib/utils/lesson-tier";
 import type { LessonMeta } from "@/types";
 
@@ -29,16 +30,25 @@ export function LessonLibraryClient({
   lessons,
   initialTopic = "all",
   isLoggedIn,
+  showJoinedToast = false,
 }: {
   lessons: LessonMeta[];
   initialTopic?: string;
   isLoggedIn: boolean;
+  showJoinedToast?: boolean;
 }) {
   const [query, setQuery] = useState("");
   const [topic, setTopic] = useState(initialTopic);
   const [difficulty, setDifficulty] = useState("all");
   const ageTier = useAgeTierStore((s) => s.ageTier);
   const guestProgress = useProgressStore((s) => s.guestProgress);
+  const showToast = useToastStore((s) => s.show);
+
+  useEffect(() => {
+    if (showJoinedToast) {
+      showToast("You've joined the class! Your progress will now appear in your teacher's dashboard.");
+    }
+  }, [showJoinedToast, showToast]);
 
   const filtered = useMemo(() => {
     return lessons.filter((lesson) => {

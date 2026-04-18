@@ -35,6 +35,29 @@ export default function OnboardingPage() {
     const { data } = await supabase.auth.getUser();
     if (data.user) {
       await supabase.from("profiles").update({ age_tier: tier, onboarding_complete: true }).eq("id", data.user.id);
+      
+      // Check for pending class code
+      const pendingCode = typeof window !== "undefined" ? sessionStorage.getItem("pendingClassCode") : null;
+      if (pendingCode) {
+        sessionStorage.removeItem("pendingClassCode");
+        
+        // Find class by code
+        const { data: cls } = await supabase
+          .from("classes")
+          .select("id")
+          .eq("code", pendingCode.toUpperCase())
+          .is("archived_at", null)
+          .single();
+        
+        if (cls) {
+          // Join class
+          await supabase.from("class_members").insert({ class_id: cls.id, user_id: data.user.id });
+          // Redirect to learn with joined flag
+          setAgeTier(tier);
+          router.push(`/learn?joined=true`);
+          return;
+        }
+      }
     }
     setAgeTier(tier);
     router.push(`/learn/${first}`);
