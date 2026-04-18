@@ -2,12 +2,40 @@
 
 import { useState } from "react";
 import { curriculumSections } from "@/lib/data/site";
+import { Icon } from "@/components/ui/icons";
+import type { ReactNode } from "react";
 
-const topicAccents: Record<string, { icon: string; dot: string; badge: string }> = {
-  Budgeting: { icon: "📊", dot: "bg-violet-400", badge: "bg-violet-50 text-violet-700 ring-1 ring-violet-200" },
-  Saving:    { icon: "🏦", dot: "bg-emerald-400", badge: "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200" },
-  Investing: { icon: "📈", dot: "bg-amber-400",   badge: "bg-amber-50 text-amber-700 ring-1 ring-amber-200" },
-  Banking:   { icon: "💳", dot: "bg-sky-400",     badge: "bg-sky-50 text-sky-700 ring-1 ring-sky-200" },
+type TopicAccent = { icon: ReactNode; dot: string; badge: string; iconBg: string; iconColor: string };
+
+const topicAccents: Record<string, TopicAccent> = {
+  Budgeting: {
+    icon: <Icon.Budget className="h-5 w-5" />,
+    dot: "bg-violet-400",
+    badge: "bg-violet-50 text-violet-700 ring-1 ring-violet-200",
+    iconBg: "bg-violet-50",
+    iconColor: "text-violet-600",
+  },
+  Saving: {
+    icon: <Icon.Saving className="h-5 w-5" />,
+    dot: "bg-emerald-400",
+    badge: "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200",
+    iconBg: "bg-emerald-50",
+    iconColor: "text-emerald-600",
+  },
+  Investing: {
+    icon: <Icon.Investing className="h-5 w-5" />,
+    dot: "bg-amber-400",
+    badge: "bg-amber-50 text-amber-700 ring-1 ring-amber-200",
+    iconBg: "bg-amber-50",
+    iconColor: "text-amber-600",
+  },
+  Banking: {
+    icon: <Icon.Bank className="h-5 w-5" />,
+    dot: "bg-sky-400",
+    badge: "bg-sky-50 text-sky-700 ring-1 ring-sky-200",
+    iconBg: "bg-sky-50",
+    iconColor: "text-sky-600",
+  },
 };
 
 export default function CurriculumPage() {
@@ -31,7 +59,7 @@ export default function CurriculumPage() {
                 onClick={() => setOpen(s.topic)}
                 className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold transition-all ${a?.badge ?? "bg-gray-100 text-gray-600"} ${open === s.topic ? "scale-105 shadow-sm" : "opacity-60 hover:opacity-100"}`}
               >
-                <span>{a?.icon}</span>
+                <span className={a?.iconColor ?? "text-gray-600"}>{a?.icon}</span>
                 {s.topic}
               </button>
             );
@@ -43,7 +71,7 @@ export default function CurriculumPage() {
       <div className="space-y-3">
         {curriculumSections.map((item) => {
           const isOpen = open === item.topic;
-          const a = topicAccents[item.topic] ?? { icon: "📚", dot: "bg-gray-400", badge: "bg-gray-100 text-gray-600" };
+          const a = topicAccents[item.topic] ?? { icon: <Icon.Goals className="h-5 w-5" />, dot: "bg-gray-400", badge: "bg-gray-100 text-gray-600", iconBg: "bg-gray-50", iconColor: "text-gray-500" };
 
           return (
             <div
@@ -59,7 +87,7 @@ export default function CurriculumPage() {
                 className="flex w-full items-center gap-4 px-6 py-5 text-left"
                 onClick={() => setOpen(isOpen ? null : item.topic)}
               >
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gray-50 text-xl ring-1 ring-[var(--color-border)]">
+                <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ring-1 ring-[var(--color-border)] ${a.iconBg} ${a.iconColor}`}>
                   {a.icon}
                 </span>
                 <div className="flex-1 min-w-0">
