@@ -23,29 +23,10 @@ set search_path = public
 as $$
 #variable_conflict use_variable
 declare
-  v_lessons_completed int;
-  v_streak int;
-  v_xp int;
   v_achievement record;
   v_earned boolean;
   v_newly_earned uuid[] := '{}';
-  v_daily_lessons int;
 begin
-  -- Base stats
-  select
-    (select count(*) from lesson_progress where user_id = p_user_id and status = 'completed'),
-    streak_current,
-    xp
-  into v_lessons_completed, v_streak, v_xp
-  from profiles where id = p_user_id;
-
-  -- Lessons completed today
-  select count(*) into v_daily_lessons
-  from lesson_progress
-  where user_id = p_user_id
-    and status = 'completed'
-    and completed_at::date = current_date;
-
   -- Loop achievements
   for v_achievement in select * from achievements loop
 
@@ -57,13 +38,28 @@ begin
     v_earned := false;
 
     if v_achievement.condition_type = 'lessons_completed' then
-      v_earned := v_lessons_completed >= v_achievement.condition_value;
+      v_earned := (
+        select count(*)
+        from lesson_progress
+        where user_id = p_user_id
+          and status = 'completed'
+      ) >= v_achievement.condition_value;
 
     elsif v_achievement.condition_type = 'streak_days' then
-      v_earned := v_streak >= v_achievement.condition_value;
+      v_earned := (
+        select coalesce(streak_current, 0)
+        from profiles
+        where id = p_user_id
+      ) >= v_achievement.condition_value;
 
     elsif v_achievement.condition_type = 'daily_lessons' then
-      v_earned := v_daily_lessons >= v_achievement.condition_value;
+      v_earned := (
+        select count(*)
+        from lesson_progress
+        where user_id = p_user_id
+          and status = 'completed'
+          and completed_at::date = current_date
+      ) >= v_achievement.condition_value;
 
     elsif v_achievement.condition_type = 'quiz_perfect' then
       v_earned := exists (
