@@ -51,14 +51,14 @@ language plpgsql
 as $$
 declare
   v_code text;
-  v_exists boolean;
+  v_count int;
 begin
   loop
     -- Generate random 6-char uppercase alphanumeric code
     v_code := upper(substring(md5(random()::text) from 1 for 6));
     -- Check uniqueness
-    select exists(select 1 from classes where code = v_code) into v_exists;
-    exit when not v_exists;
+    select count(*) into v_count from classes where code = v_code;
+    exit when v_count = 0;
   end loop;
   return v_code;
 end;
