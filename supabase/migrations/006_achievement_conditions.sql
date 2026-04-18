@@ -1,11 +1,27 @@
 set search_path = public;
 
+create table if not exists lesson_shares (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references profiles(id) on delete cascade,
+  lesson_slug text not null,
+  shared_at timestamptz default now()
+);
+
+alter table lesson_shares enable row level security;
+
+drop policy if exists "Users can manage own shares" on lesson_shares;
+create policy "Users can manage own shares"
+  on lesson_shares for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+grant select, insert on lesson_shares to authenticated;
+
 create or replace function check_and_award_achievements(p_user_id uuid)
 returns jsonb
 language plpgsql
 security definer
 set search_path = public
 as $$
+#variable_conflict use_variable
 declare
   v_lessons_completed int;
   v_streak int;
@@ -130,19 +146,4 @@ begin
   );
 end;
 $$;
-
-create table if not exists lesson_shares (
-  id uuid primary key default gen_random_uuid(),
-  user_id uuid references profiles(id) on delete cascade,
-  lesson_slug text not null,
-  shared_at timestamptz default now()
-);
-
-alter table lesson_shares enable row level security;
-
-drop policy if exists "Users can manage own shares" on lesson_shares;
-create policy "Users can manage own shares"
-  on lesson_shares for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
-
-grant select, insert on lesson_shares to authenticated;
 grant execute on function check_and_award_achievements(uuid) to authenticated;
