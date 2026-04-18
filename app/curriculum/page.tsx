@@ -5,36 +5,62 @@ import { curriculumSections } from "@/lib/data/site";
 import { Icon } from "@/components/ui/icons";
 import type { ReactNode } from "react";
 
-type TopicAccent = { icon: ReactNode; dot: string; badge: string; iconBg: string; iconColor: string };
+type TopicAccent = {
+  icon: ReactNode;
+  dot: string;
+  badge: string;
+  iconBg: string;
+  iconColor: string;
+  cardBg: string;
+  cardBorder: string;
+  tierBg: string;
+  accentBar: string;
+};
 
 const topicAccents: Record<string, TopicAccent> = {
   Budgeting: {
     icon: <Icon.Budget className="h-5 w-5" />,
     dot: "bg-violet-400",
     badge: "bg-violet-50 text-violet-700 ring-1 ring-violet-200",
-    iconBg: "bg-violet-50",
+    iconBg: "bg-violet-100",
     iconColor: "text-violet-600",
+    cardBg: "bg-violet-50/40",
+    cardBorder: "border-violet-200",
+    tierBg: "bg-violet-50/60",
+    accentBar: "border-l-4 border-l-violet-300",
   },
   Saving: {
     icon: <Icon.Saving className="h-5 w-5" />,
     dot: "bg-emerald-400",
     badge: "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200",
-    iconBg: "bg-emerald-50",
+    iconBg: "bg-emerald-100",
     iconColor: "text-emerald-600",
+    cardBg: "bg-emerald-50/40",
+    cardBorder: "border-emerald-200",
+    tierBg: "bg-emerald-50/60",
+    accentBar: "border-l-4 border-l-emerald-300",
   },
   Investing: {
     icon: <Icon.Investing className="h-5 w-5" />,
     dot: "bg-amber-400",
     badge: "bg-amber-50 text-amber-700 ring-1 ring-amber-200",
-    iconBg: "bg-amber-50",
+    iconBg: "bg-amber-100",
     iconColor: "text-amber-600",
+    cardBg: "bg-amber-50/40",
+    cardBorder: "border-amber-200",
+    tierBg: "bg-amber-50/60",
+    accentBar: "border-l-4 border-l-amber-300",
   },
   Banking: {
     icon: <Icon.Bank className="h-5 w-5" />,
     dot: "bg-sky-400",
     badge: "bg-sky-50 text-sky-700 ring-1 ring-sky-200",
-    iconBg: "bg-sky-50",
+    iconBg: "bg-sky-100",
     iconColor: "text-sky-600",
+    cardBg: "bg-sky-50/40",
+    cardBorder: "border-sky-200",
+    tierBg: "bg-sky-50/60",
+    accentBar: "border-l-4 border-l-sky-300",
   },
 };
 
@@ -71,15 +97,15 @@ export default function CurriculumPage() {
       <div className="space-y-3">
         {curriculumSections.map((item) => {
           const isOpen = open === item.topic;
-          const a = topicAccents[item.topic] ?? { icon: <Icon.Goals className="h-5 w-5" />, dot: "bg-gray-400", badge: "bg-gray-100 text-gray-600", iconBg: "bg-gray-50", iconColor: "text-gray-500" };
+          const a = topicAccents[item.topic] ?? { icon: <Icon.Goals className="h-5 w-5" />, dot: "bg-gray-400", badge: "bg-gray-100 text-gray-600", iconBg: "bg-gray-50", iconColor: "text-gray-500", cardBg: "bg-gray-50", cardBorder: "border-gray-200", tierBg: "bg-gray-50", accentBar: "border-l-4 border-l-gray-300" };
 
           return (
             <div
               key={item.topic}
               className={`overflow-hidden rounded-2xl border transition-all duration-200 ${
                 isOpen
-                  ? "border-[#e8dfcf] bg-white shadow-[var(--shadow-card)]"
-                  : "border-[#e8dfcf] bg-white/70 hover:bg-white hover:shadow-[var(--shadow-card)]"
+                  ? `${a.cardBorder} ${a.cardBg} ${a.accentBar} shadow-[var(--shadow-card)]`
+                  : `border-[#e8dfcf] bg-white/70 hover:${a.cardBg} hover:${a.cardBorder} hover:shadow-[var(--shadow-card)]`
               }`}
             >
               {/* Header button */}
@@ -112,7 +138,7 @@ export default function CurriculumPage() {
                   <p className="mb-5 border-t border-[var(--color-border)] pt-4 text-sm leading-relaxed text-[var(--color-text-secondary)]">{item.summary}</p>
                   <div className="grid gap-4 md:grid-cols-2">
                     {/* Foundation tier */}
-                    <div className="rounded-xl bg-gray-50 p-4 ring-1 ring-[var(--color-border)]">
+                    <div className={`rounded-xl p-4 ring-1 ring-[var(--color-border)] ${a.tierBg}`}>
                       <div className="mb-3 flex items-center gap-2">
                         <span className={`h-2 w-2 rounded-full ${a.dot}`} />
                         <p className="text-xs font-semibold uppercase tracking-widest text-[var(--color-text-secondary)]">Ages 8–12</p>
@@ -129,7 +155,7 @@ export default function CurriculumPage() {
                     </div>
 
                     {/* Real World tier */}
-                    <div className="rounded-xl bg-gray-50 p-4 ring-1 ring-[var(--color-border)]">
+                    <div className={`rounded-xl p-4 ring-1 ring-[var(--color-border)] ${a.tierBg}`}>
                       <div className="mb-3 flex items-center gap-2">
                         <span className={`h-2 w-2 rounded-full ${a.dot}`} />
                         <p className="text-xs font-semibold uppercase tracking-widest text-[var(--color-text-secondary)]">Ages 13–17</p>
