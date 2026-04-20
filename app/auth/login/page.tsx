@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { LoginForm } from "@/components/auth/login-form";
 
 export default function LoginPage() {
@@ -24,7 +25,9 @@ export default function LoginPage() {
       </section>
       <section className="rounded-[32px] border border-white/60 bg-white/85 p-8 shadow-[var(--shadow-card)] backdrop-blur sm:p-10">
         <h2 className="mb-4 text-2xl font-bold">Log in</h2>
-        <LoginForm />
+        <Suspense fallback={<p className="text-sm text-[var(--color-text-secondary)]">Loading login…</p>}>
+          <LoginForm />
+        </Suspense>
       </section>
     </div>
   );
