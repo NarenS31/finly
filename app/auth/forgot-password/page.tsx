@@ -5,6 +5,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { getClientSiteUrl } from "@/lib/utils/site-url";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
@@ -16,7 +17,7 @@ export default function ForgotPasswordPage() {
     setLoading(true);
     setMsg("");
     const supabase = createClient();
-    const site = typeof window !== "undefined" ? window.location.origin : "";
+    const site = getClientSiteUrl();
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${site}/auth/login`,
     });

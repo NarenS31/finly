@@ -7,6 +7,7 @@ import { ArrowRight, Mail, ShieldCheck } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { getClientSiteUrl } from "@/lib/utils/site-url";
 
 export function LoginForm() {
   const router = useRouter();
@@ -52,7 +53,7 @@ export function LoginForm() {
     setError("");
 
     const supabase = createClient();
-    const site = typeof window !== "undefined" ? window.location.origin : "";
+    const site = getClientSiteUrl();
     const { error: resendError } = await supabase.auth.resend({
       type: "signup",
       email,
@@ -73,7 +74,8 @@ export function LoginForm() {
 
   async function onGoogle() {
     const supabase = createClient();
-    await supabase.auth.signInWithOAuth({ provider: "google", options: { redirectTo: `${window.location.origin}/profile` } });
+    const site = getClientSiteUrl();
+    await supabase.auth.signInWithOAuth({ provider: "google", options: { redirectTo: `${site}/dashboard` } });
   }
 
   return (

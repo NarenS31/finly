@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCurrencyStore } from "@/lib/store/currency-store";
 import { PasswordStrength } from "@/components/auth/password-strength";
+import { getClientSiteUrl } from "@/lib/utils/site-url";
 
 export function SignupForm() {
   const router = useRouter();
@@ -54,7 +55,7 @@ export function SignupForm() {
     setNotice("");
 
     const supabase = createClient();
-    const site = typeof window !== "undefined" ? window.location.origin : "";
+    const site = getClientSiteUrl();
     const { data, error: signUpError } = await supabase.auth.signUp({
       email,
       password,
