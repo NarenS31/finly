@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { CompletionCard } from "@/components/lesson/completion-card";
 import { Finn } from "@/components/mascot/finn";
+import type { FinnMood } from "@/components/mascot/finn";
 import { useProgress } from "@/lib/hooks/use-progress";
 import { useAuth } from "@/lib/hooks/use-auth";
 import { createClient } from "@/lib/supabase/client";
@@ -223,6 +224,15 @@ export function LessonViewer({
     }
   }, [slug, supabase, title, toast, user?.id]);
 
+  const finnMood: FinnMood = useMemo(() => {
+    if (entry?.status === "completed") return "love";
+    if (effectiveQuizCount > 0 && correctCount === effectiveQuizCount && effectiveQuizCount > 0) return "excited";
+    const wrongs = Object.entries(answeredMap).filter(([, ok]) => !ok).length;
+    if (wrongs > 0 && correctCount === 0) return "sad";
+    if (wrongs > 0) return "thinking";
+    return "happy";
+  }, [entry?.status, effectiveQuizCount, correctCount, answeredMap]);
+
   const tierClass = tier === "8-12" ? "tier-foundation" : "";
 
   const quizLabel =
@@ -265,7 +275,7 @@ export function LessonViewer({
             <Card className="border-[var(--color-border)] bg-[var(--color-surface)] p-4">
               <p className="text-sm font-semibold text-[var(--color-text-primary)]">Your guide</p>
               <div className="mt-3 flex justify-center">
-                <Finn />
+                <Finn mood={finnMood} />
               </div>
             </Card>
           )}

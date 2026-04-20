@@ -6,11 +6,17 @@ import { FloatingHero } from "@/components/layout/floating-hero";
 import { homepageSteps, topicMeta } from "@/lib/data/site";
 import { getAllLessons } from "@/lib/utils/lessons";
 import { getPlatformStats } from "@/lib/utils/platform";
+import { DailyChallenge } from "@/components/home/daily-challenge";
+import { WeeklyPoll } from "@/components/home/weekly-poll";
+import { createClient } from "@/lib/supabase/server";
 
 export default async function HomePage() {
   const stats = await getPlatformStats();
   const lessons = getAllLessons();
   const featuredLessons = lessons.slice(0, 3);
+  const supabase = await createClient();
+  const { data: auth } = await supabase.auth.getUser();
+  const isGuest = !auth.user;
 
   return (
     <div className="space-y-20 pb-8">
@@ -132,6 +138,30 @@ export default async function HomePage() {
             </div>
           ))}
         </div>
+      </section>
+
+      {/* ── Daily Challenge + Weekly Poll ────────────────────── */}
+      <section>
+        <div className="grid gap-6 lg:grid-cols-2">
+          <div>
+            <p className="label-eyebrow mb-3">Today's challenge</p>
+            <DailyChallenge isGuest={isGuest} />
+          </div>
+          <div>
+            <p className="label-eyebrow mb-3">What would you do?</p>
+            <WeeklyPoll isGuest={isGuest} />
+          </div>
+        </div>
+      </section>
+
+      {/* ── Leaderboard teaser ───────────────────────────────── */}
+      <section className="rounded-2xl border border-[#e8dfcf] bg-white p-6 text-center">
+        <p className="text-2xl">🏆</p>
+        <h2 className="mt-2 text-xl font-bold">Think you're the best?</h2>
+        <p className="mt-1 text-sm text-[var(--color-text-secondary)]">Compete with learners worldwide. Top 50 ranked by XP.</p>
+        <Button asChild variant="ghost" className="mt-4">
+          <Link href="/leaderboard">See the leaderboard →</Link>
+        </Button>
       </section>
 
       {/* ── CTA ──────────────────────────────────────────────── */}

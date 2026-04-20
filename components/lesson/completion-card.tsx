@@ -21,6 +21,7 @@ export function CompletionCard({
   onClose: () => void;
 }) {
   const [stars, setStars] = useState(0);
+  const [shareState, setShareState] = useState<"idle" | "shared" | "copied">("idle");
 
   useEffect(() => {
     if (!open) return;
@@ -32,6 +33,28 @@ export function CompletionCard({
     });
     return () => timers.forEach(clearTimeout);
   }, [open]);
+
+  const handleChallengeFriend = async () => {
+    const url = nextLesson ? `${window.location.origin}/learn/${nextLesson.slug}` : window.location.href;
+    const text = `I just finished a Finly lesson and earned ${xp} XP. Think you can beat me?`;
+
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: "Challenge me on Finly",
+          text,
+          url,
+        });
+        setShareState("shared");
+        return;
+      }
+
+      await navigator.clipboard.writeText(`${text} ${url}`);
+      setShareState("copied");
+    } catch {
+      setShareState("idle");
+    }
+  };
 
   return (
     <AnimatePresence>
@@ -79,6 +102,9 @@ export function CompletionCard({
               </ul>
             )}
             <div className="mt-6 flex flex-col gap-2 sm:flex-row">
+              <Button type="button" variant="ghost" className="btn-press flex-1 justify-center" onClick={handleChallengeFriend}>
+                {shareState === "idle" ? "Challenge a friend" : shareState === "shared" ? "Challenge sent" : "Link copied"}
+              </Button>
               {nextLesson ? (
                 <Button asChild className="btn-press flex-1 justify-center">
                   <Link href={`/learn/${nextLesson.slug}`}>Next lesson →</Link>

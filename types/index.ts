@@ -61,6 +61,12 @@ export interface Profile {
   level: LevelName | string;
   streak_current: number;
   streak_longest: number;
+  streak_shields: number;
+  avatar?: {
+    hat?: string | null;
+    accessory?: string | null;
+    badge?: string | null;
+  } | null;
   last_active_date: string | null;
   email_notify_streak: boolean;
   email_notify_weekly: boolean;

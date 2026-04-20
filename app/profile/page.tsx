@@ -10,6 +10,10 @@ import { LessonHistory, type HistoryRow } from "@/components/profile/lesson-hist
 import { ProfileSettings } from "@/components/profile/profile-settings";
 import { Avatar } from "@/components/ui/avatar";
 import { StreakPill } from "@/components/profile/streak-pill";
+import { StreakShieldWidget } from "@/components/profile/streak-shield-widget";
+import { MoneyGoalsTracker } from "@/components/profile/money-goals-tracker";
+import { AvatarBuilder } from "@/components/profile/avatar-builder";
+import { ShareStatsCard } from "@/components/profile/share-stats-card";
 
 function embeddedLessonTopic(lessons: unknown): string | undefined {
   if (lessons && typeof lessons === "object" && !Array.isArray(lessons) && "topic" in lessons) {
@@ -147,6 +151,9 @@ export default async function ProfilePage() {
 
       <XpLevelSection xp={xp} levelLabel={levelLabel} />
 
+      {/* Streak Shield */}
+      <StreakShieldWidget shields={profile?.streak_shields ?? 0} />
+
       <div className="grid gap-6 xl:grid-cols-[1fr_360px]">
         <TopicRadarChart data={topicData} />
         <Card className="border-[var(--color-border)] bg-[var(--color-surface)] p-6">
@@ -162,6 +169,14 @@ export default async function ProfilePage() {
           </div>
         </Card>
       </div>
+
+      {/* Avatar Builder */}
+      <AvatarBuilder userXp={xp} initialAvatar={(profile?.avatar as Record<string, string | null>) ?? {}} />
+
+      <ShareStatsCard displayName={displayName} xp={xp} streak={streak} level={levelLabel} />
+
+      {/* Money Goals */}
+      <MoneyGoalsTracker />
 
       <section>
         <h2 className="mb-4 text-2xl font-bold text-[var(--color-text-primary)]">Achievements</h2>
