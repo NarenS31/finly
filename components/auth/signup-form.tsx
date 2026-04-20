@@ -18,6 +18,7 @@ export function SignupForm() {
   const [ageTier, setAgeTier] = useState<"8-12" | "13-17">("13-17");
   const [terms, setTerms] = useState(false);
   const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [guestHint] = useState(() => {
     if (typeof window === "undefined") return false;
@@ -50,9 +51,17 @@ export function SignupForm() {
     if (strength < 2) return setError("Please choose a stronger password.");
     setSubmitting(true);
     setError("");
+    setNotice("");
 
     const supabase = createClient();
-    const { data, error: signUpError } = await supabase.auth.signUp({ email, password });
+    const site = typeof window !== "undefined" ? window.location.origin : "";
+    const { data, error: signUpError } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: `${site}/auth/callback?next=/dashboard`,
+      },
+    });
     if (signUpError) {
       setSubmitting(false);
       return setError(signUpError.message);
@@ -72,6 +81,13 @@ export function SignupForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ to: email, name: displayName || "there" }),
       });
+    }
+
+    if (!data.session) {
+      setSubmitting(false);
+      setNotice("Account created. Check your email to confirm your account, then log in.");
+      router.push(`/auth/login?email=${encodeURIComponent(email)}&checkEmail=1`);
+      return;
     }
 
     router.push("/onboarding");
@@ -117,6 +133,7 @@ export function SignupForm() {
         <input type="checkbox" checked={terms} onChange={(e) => setTerms(e.target.checked)} className="mt-1" />
         <span>I agree to the Terms of Service and Privacy Policy.</span>
       </label>
+      {notice && <p className="text-sm text-[var(--color-secondary)]">{notice}</p>}
       {error && <p className="text-sm text-[var(--color-error)]">{error}</p>}
       <Button className="w-full min-h-12" type="submit">
         {submitting ? "Creating account…" : "Create account"}

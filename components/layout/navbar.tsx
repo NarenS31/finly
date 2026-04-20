@@ -11,6 +11,7 @@ export function Navbar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const links = [
+    { href: "/dashboard", label: "Dashboard" },
     { href: "/learn", label: "Learn" },
     { href: "/curriculum", label: "Curriculum" },
     { href: "/simulator", label: "Simulator" },

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowRight, Mail, ShieldCheck } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -10,23 +10,65 @@ import { Input } from "@/components/ui/input";
 
 export function LoginForm() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
+  const searchParams = useSearchParams();
+  const nextPath = searchParams.get("next");
+  const redirectTo = nextPath && nextPath.startsWith("/") ? nextPath : "/dashboard";
+  const [email, setEmail] = useState(searchParams.get("email") ?? "");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [notice, setNotice] = useState(
+    searchParams.get("checkEmail") === "1"
+      ? "Check your inbox and confirm your email before logging in."
+      : ""
+  );
   const [submitting, setSubmitting] = useState(false);
+  const [resending, setResending] = useState(false);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
+    setNotice("");
     setSubmitting(true);
     const supabase = createClient();
     const { error: authError } = await supabase.auth.signInWithPassword({ email, password });
     if (authError) {
       setSubmitting(false);
+      if (/email.*confirm/i.test(authError.message)) {
+        setNotice("Your email is not confirmed yet. Confirm it from your inbox, or resend below.");
+      }
       return setError(authError.message);
     }
-    router.push("/profile");
+    router.push(redirectTo);
     router.refresh();
+  }
+
+  async function resendConfirmation() {
+    if (!email) {
+      setError("Enter your email first, then tap resend.");
+      return;
+    }
+
+    setResending(true);
+    setError("");
+
+    const supabase = createClient();
+    const site = typeof window !== "undefined" ? window.location.origin : "";
+    const { error: resendError } = await supabase.auth.resend({
+      type: "signup",
+      email,
+      options: {
+        emailRedirectTo: `${site}/auth/callback?next=/dashboard`,
+      },
+    });
+
+    setResending(false);
+
+    if (resendError) {
+      setError(resendError.message);
+      return;
+    }
+
+    setNotice("Confirmation email sent. Open it, confirm, then log in again.");
   }
 
   async function onGoogle() {
@@ -52,7 +94,11 @@ export function LoginForm() {
           />
         </div>
       </div>
+      {notice && <p className="text-sm text-[var(--color-secondary)]">{notice}</p>}
       {error && <p className="text-sm text-[var(--color-error)]">{error}</p>}
+      <Button className="w-full min-h-12" type="button" variant="ghost" onClick={() => void resendConfirmation()}>
+        {resending ? "Resending confirmation…" : "Resend confirmation email"}
+      </Button>
       <Button className="w-full min-h-12" type="submit">
         {submitting ? "Logging in…" : "Log in"}
         <ArrowRight className="ml-2 h-4 w-4" />
