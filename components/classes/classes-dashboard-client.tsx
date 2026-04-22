@@ -212,7 +212,7 @@ export function ClassesDashboardClient({ classes: initialClasses, userId }: Prop
                 title="Copy join link"
                 style={{ fontSize: '13px', padding: '7px 14px' }}
               >
-                {copiedCode === cls.code ? '✓ Copied' : 'Copy code'}
+                {copiedCode === cls.code ? 'Copied' : 'Copy code'}
               </button>
               <Link href={`/classes/${cls.id}`}>
                 <button className="btn-primary" style={{ padding: '7px 16px', fontSize: '13px' }}>

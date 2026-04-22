@@ -106,7 +106,7 @@ export function WeeklyPoll({ isGuest = false }: { isGuest?: boolean }) {
                 />
               )}
               <span className="relative flex items-center justify-between">
-                <span>{opt}{isTop && hasVoted && " 🏆"}</span>
+                <span>{opt}</span>
                 {hasVoted && (
                   <span className={`font-bold ${isMyVote ? "text-[var(--green-deeper)]" : "text-[var(--gray-400)]"}`}>
                     {pct}%

@@ -4,6 +4,7 @@ import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { FinlyLogo } from '@/components/layout/finly-logo';
+import { Button } from '@/components/ui/button';
 
 function JoinFormContent() {
   const router = useRouter();
@@ -115,7 +116,14 @@ function JoinFormContent() {
         </form>
 
         <p style={{ fontSize: '13px', color: 'var(--gray-400)', textAlign: 'center', marginTop: '20px', marginBottom: 0 }}>
-          Don't have a code? <a href="/learn" style={{ color: 'var(--green)', fontWeight: 700 }}>Browse lessons anyway →</a>
+          <div style={{ textAlign: 'center', marginTop: 20, marginBottom: 0 }}>
+            <span style={{ fontSize: '13px', color: 'var(--gray-400)', marginRight: 8 }}>
+              Don't have a code?
+            </span>
+            <Button asChild className="bg-black text-white font-bold px-4 py-2 rounded-lg inline-block" style={{ fontSize: 13, height: 'auto', minHeight: 0, lineHeight: 1.2 }}>
+              <a href="/learn" className="!text-white">Browse lessons anyway →</a>
+            </Button>
+          </div>
         </p>
       </div>
     </div>

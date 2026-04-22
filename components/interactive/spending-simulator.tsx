@@ -27,18 +27,18 @@ const WEEKLY_ALLOWANCE = 10;
 const EVENTS: EventCard[] = [
   {
     day: 1,
-    emoji: "🍕",
+    emoji: "",
     title: "Pizza Friday!",
     description: "Your friends want to go out for pizza after school. It'll cost $12.",
     choices: [
-      { label: "Go! I deserve it 🎉", cost: 12, happiness: 2, savingsEffect: 0, finn: "excited", feedback: "Fun! But that's $12 gone. Treat yourself sometimes, but not every time." },
+      { label: "Go! I deserve it", cost: 12, happiness: 2, savingsEffect: 0, finn: "excited", feedback: "Fun! But that's $12 gone. Treat yourself sometimes, but not every time." },
       { label: "I'll pass and save the $12", cost: 0, happiness: -1, savingsEffect: 12, finn: "cool", feedback: "Smart save! That $12 stays in your pocket. FOMO is real but so is your bank balance." },
       { label: "Split a pizza — spend $6", cost: 6, happiness: 1, savingsEffect: 0, finn: "happy", feedback: "Balance! Half the fun, half the cost. This is the move." },
     ],
   },
   {
     day: 3,
-    emoji: "🎮",
+    emoji: "",
     title: "New Game Drop",
     description: "A game you've wanted just launched — $35. Your friend says you can share their copy for $5.",
     choices: [
@@ -49,7 +49,7 @@ const EVENTS: EventCard[] = [
   },
   {
     day: 5,
-    emoji: "💸",
+    emoji: "",
     title: "Allowance Day!",
     description: `You just got your $${WEEKLY_ALLOWANCE} weekly allowance. What do you do first?`,
     choices: [
@@ -60,7 +60,7 @@ const EVENTS: EventCard[] = [
   },
   {
     day: 7,
-    emoji: "👟",
+    emoji: "",
     title: "Limited Sneakers",
     description: "Limited-edition shoes, $65. A classmate offers to sell their pair for $40.",
     choices: [
@@ -71,7 +71,7 @@ const EVENTS: EventCard[] = [
   },
   {
     day: 10,
-    emoji: "🎪",
+    emoji: "",
     title: "Weekend Festival",
     description: "Theme park trip! Entry $25, you'll want $20 for food and rides, so $45 total.",
     choices: [
@@ -185,7 +185,7 @@ export function SpendingSimulator() {
             <p className="mt-1 text-xs text-[var(--gray-500)]">Saved</p>
           </div>
           <div className="rounded-xl bg-amber-50 p-4">
-            <p className="text-2xl font-extrabold text-amber-700">{"😊".repeat(Math.ceil(happiness / 3))}</p>
+            <p className="text-2xl font-extrabold text-amber-700"></p>
             <p className="mt-1 text-xs text-[var(--gray-500)]">Happiness</p>
           </div>
         </div>
@@ -204,8 +204,8 @@ export function SpendingSimulator() {
       {/* Status bar */}
       <div className="flex items-center justify-between border-b border-[var(--border)] px-5 py-3">
         <div className="flex items-center gap-4 text-sm">
-          <span className="font-bold text-[var(--black)]">💰 ${balance}</span>
-          <span className="font-bold text-[var(--green-deeper)]">🏦 ${savings} saved</span>
+          <span className="font-bold text-[var(--black)]">${balance}</span>
+          <span className="font-bold text-[var(--green-deeper)]">${savings} saved</span>
         </div>
         <div className="flex items-center gap-2">
           <span className="text-xs text-[var(--gray-500)]">Happiness</span>

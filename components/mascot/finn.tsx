@@ -2,77 +2,86 @@
 
 export type FinnMood = "happy" | "excited" | "sad" | "thinking" | "cool" | "love";
 
-// Mouth paths per mood
-const MOUTH: Record<FinnMood, React.ReactNode> = {
-  happy:    <path d="M34 54 Q40 60 46 54" stroke="#1c1917" strokeWidth="1.8" strokeLinecap="round" fill="none" />,
-  excited:  <path d="M33 53 Q40 62 47 53" stroke="#1c1917" strokeWidth="2" strokeLinecap="round" fill="none" />,
-  sad:      <path d="M34 58 Q40 52 46 58" stroke="#1c1917" strokeWidth="1.8" strokeLinecap="round" fill="none" />,
-  thinking: <path d="M36 55 Q40 56 44 53" stroke="#1c1917" strokeWidth="1.8" strokeLinecap="round" fill="none" />,
-  cool:     <path d="M34 55 Q40 60 46 55" stroke="#1c1917" strokeWidth="2" strokeLinecap="round" fill="none" />,
-  love:     <path d="M34 54 Q40 62 46 54" stroke="#e11d48" strokeWidth="2" strokeLinecap="round" fill="none" />,
-};
+const D = "#2C1300";
+const CR = "#FFF5E0";
+const SW = 3.8;
 
-// Eye overrides per mood
-const EYES: Record<FinnMood, React.ReactNode> = {
-  happy: (
+function Eyes({ mood }: { mood: FinnMood }) {
+  if (mood === "love") return (
     <>
-      <ellipse cx="30" cy="40" rx="5" ry="5.5" fill="#1c1917" />
-      <ellipse cx="50" cy="40" rx="5" ry="5.5" fill="#1c1917" />
-      <circle cx="32" cy="38" r="1.8" fill="white" />
-      <circle cx="52" cy="38" r="1.8" fill="white" />
+      <path d="M34 45 C34 41 40 41 40 45 C40 49 34 53 34 53 C34 53 28 49 28 45 C28 41 34 41 34 45Z" fill="#e11d48" />
+      <path d="M70 45 C70 41 76 41 76 45 C76 49 70 53 70 53 C70 53 64 49 64 45 C64 41 70 41 70 45Z" fill="#e11d48" />
     </>
-  ),
-  excited: (
+  );
+
+  if (mood === "cool") return (
     <>
-      {/* Wide open eyes with bigger shine */}
-      <ellipse cx="30" cy="40" rx="6" ry="6.5" fill="#1c1917" />
-      <ellipse cx="50" cy="40" rx="6" ry="6.5" fill="#1c1917" />
-      <circle cx="32" cy="37.5" r="2.2" fill="white" />
-      <circle cx="52" cy="37.5" r="2.2" fill="white" />
+      <rect x="26" y="37" width="21" height="14" rx="5" fill="#0f172a" stroke={D} strokeWidth="2" />
+      <rect x="61" y="37" width="21" height="14" rx="5" fill="#0f172a" stroke={D} strokeWidth="2" />
+      <line x1="47" y1="44" x2="61" y2="44" stroke={D} strokeWidth="2.5" strokeLinecap="round" />
+      <circle cx="33" cy="43" r="3.2" fill="#334155" opacity="0.4" />
+      <circle cx="68" cy="43" r="3.2" fill="#334155" opacity="0.4" />
     </>
-  ),
-  sad: (
+  );
+
+  const rl = mood === "sad" ? 7.5 : mood === "excited" ? 9.5 : 8.5;
+  const rr = mood === "thinking" ? 6 : rl;
+  const adj = mood === "sad" ? 1.5 : 0;
+  const shine = mood === "excited" ? 3.8 : 3.2;
+
+  return (
     <>
-      {/* Droopy eyes */}
-      <ellipse cx="30" cy="41" rx="5" ry="4.5" fill="#1c1917" />
-      <ellipse cx="50" cy="41" rx="5" ry="4.5" fill="#1c1917" />
-      <circle cx="32" cy="39.5" r="1.8" fill="white" />
-      <circle cx="52" cy="39.5" r="1.8" fill="white" />
-      {/* Teardrop */}
-      <ellipse cx="27" cy="46" rx="1.2" ry="1.8" fill="#93c5fd" opacity="0.8" />
+      <circle cx="38" cy={44 + adj} r={rl} fill={D} />
+      <circle cx="70" cy={44 + adj} r={rr} fill={D} />
+      <circle cx="41.5" cy={41 + adj} r={shine} fill="white" />
+      <circle cx="73.5" cy={41 + adj} r={shine} fill="white" />
+      <circle cx="39" cy={47.5 + adj} r="1.5" fill="white" opacity="0.4" />
+      <circle cx="71" cy={47.5 + adj} r="1.5" fill="white" opacity="0.4" />
+      {mood === "sad" && <ellipse cx="30" cy="55" rx="2.2" ry="3.2" fill="#93c5fd" opacity="0.9" />}
     </>
-  ),
-  thinking: (
+  );
+}
+
+function Brows({ mood }: { mood: FinnMood }) {
+  if (mood === "sad") return (
     <>
-      <ellipse cx="30" cy="40" rx="5" ry="5.5" fill="#1c1917" />
-      {/* One eye partially closed / squinting */}
-      <ellipse cx="50" cy="41" rx="5" ry="3.5" fill="#1c1917" />
-      <circle cx="32" cy="38" r="1.8" fill="white" />
-      <circle cx="52" cy="39.5" r="1.5" fill="white" />
-      {/* Thought dots */}
-      <circle cx="55" cy="28" r="1.5" fill="#1c1917" opacity="0.3" />
-      <circle cx="59" cy="23" r="2" fill="#1c1917" opacity="0.3" />
-      <circle cx="64" cy="17" r="2.8" fill="#1c1917" opacity="0.2" />
+      <path d="M26 36 Q33 30 40 34" stroke={D} strokeWidth="2.8" fill="none" strokeLinecap="round" />
+      <path d="M68 34 Q75 30 82 36" stroke={D} strokeWidth="2.8" fill="none" strokeLinecap="round" />
     </>
-  ),
-  cool: (
+  );
+  if (mood === "excited") return (
     <>
-      {/* Sunglasses */}
-      <rect x="23" y="36" width="12" height="8" rx="3" fill="#0f172a" />
-      <rect x="45" y="36" width="12" height="8" rx="3" fill="#0f172a" />
-      <line x1="35" y1="40" x2="45" y2="40" stroke="#0f172a" strokeWidth="2" />
-      <circle cx="27" cy="39" r="2" fill="#334155" opacity="0.6" />
-      <circle cx="49" cy="39" r="2" fill="#334155" opacity="0.6" />
+      <path d="M27 32 Q34 27 40 31" stroke={D} strokeWidth="2.5" fill="none" strokeLinecap="round" />
+      <path d="M68 31 Q75 27 81 32" stroke={D} strokeWidth="2.5" fill="none" strokeLinecap="round" />
     </>
-  ),
-  love: (
+  );
+  if (mood === "thinking") return (
     <>
-      {/* Heart eyes */}
-      <path d="M25 37 C25 34 29 34 29 37 C29 40 25 43 25 43 C25 43 21 40 21 37 C21 34 25 34 25 37Z" fill="#e11d48" transform="translate(3,0)" />
-      <path d="M25 37 C25 34 29 34 29 37 C29 40 25 43 25 43 C25 43 21 40 21 37 C21 34 25 34 25 37Z" fill="#e11d48" transform="translate(23,0)" />
+      <path d="M27 33 Q33 31 40 35" stroke={D} strokeWidth="2.5" fill="none" strokeLinecap="round" />
+      <path d="M68 31 Q75 35 81 31" stroke={D} strokeWidth="2.5" fill="none" strokeLinecap="round" />
     </>
-  ),
-};
+  );
+  return (
+    <>
+      <path d="M27 33 Q34 29 40 33" stroke={D} strokeWidth="2.2" fill="none" strokeLinecap="round" opacity="0.45" />
+      <path d="M68 33 Q75 29 81 33" stroke={D} strokeWidth="2.2" fill="none" strokeLinecap="round" opacity="0.45" />
+    </>
+  );
+}
+
+function Mouth({ mood }: { mood: FinnMood }) {
+  const c = mood === "love" ? "#e11d48" : D;
+  if (mood === "sad") return <path d="M46 70 Q54 64 62 70" stroke={c} strokeWidth="3" strokeLinecap="round" fill="none" />;
+  if (mood === "thinking") return <path d="M49 68 Q54 70 60 66" stroke={c} strokeWidth="2.8" strokeLinecap="round" fill="none" />;
+  if (mood === "cool") return <path d="M48 68 Q54 72 60 68" stroke={c} strokeWidth="2.8" strokeLinecap="round" fill="none" />;
+  if (mood === "excited") return (
+    <>
+      <path d="M44 67 Q54 78 64 67" stroke={c} strokeWidth="3.2" strokeLinecap="round" fill="none" />
+      <path d="M44 67 Q54 75 64 67" fill={CR} stroke="none" />
+    </>
+  );
+  return <path d="M46 68 Q54 75 62 68" stroke={c} strokeWidth="3" strokeLinecap="round" fill="none" />;
+}
 
 export function Finn({
   size = 40,
@@ -87,38 +96,74 @@ export function Finn({
     <svg
       width={size}
       height={size}
-      viewBox="0 0 80 80"
-      className={`finn-bounce inline-block ${className}`}
+      viewBox="0 0 110 125"
+      className={`finn inline-block ${className}`}
       aria-hidden
       xmlns="http://www.w3.org/2000/svg"
     >
-      {/* Ears (pointed fox ears) */}
-      <polygon points="14,38 8,8 30,26" fill="#f97316" />
-      <polygon points="17,36 11,14 28,27" fill="#fed7aa" />
-      <polygon points="66,38 72,8 50,26" fill="#f97316" />
-      <polygon points="63,36 69,14 52,27" fill="#fed7aa" />
+      <defs>
+        <radialGradient id="finnOG" cx="38%" cy="32%" r="68%" gradientUnits="objectBoundingBox">
+          <stop offset="0%" stopColor="#F57A2E" />
+          <stop offset="100%" stopColor="#C75010" />
+        </radialGradient>
+      </defs>
+
+      {/* Tail — drawn first so body covers the base */}
+      <path
+        d="M 76 108 C 108 108 112 80 103 64 C 96 50 80 48 78 62 C 84 74 81 93 76 108 Z"
+        fill="url(#finnOG)"
+        stroke={D}
+        strokeWidth={SW}
+        strokeLinejoin="round"
+      />
+      <ellipse cx="92" cy="58" rx="12" ry="10" fill={CR} stroke={D} strokeWidth="2.6" />
+
+      {/* Body */}
+      <ellipse cx="54" cy="100" rx="30" ry="23" fill="url(#finnOG)" stroke={D} strokeWidth={SW} />
+      <ellipse cx="54" cy="99" rx="20" ry="17" fill={CR} />
+
+      {/* Paws */}
+      <ellipse cx="37" cy="117" rx="13" ry="8" fill="url(#finnOG)" stroke={D} strokeWidth={SW - 0.4} />
+      <ellipse cx="71" cy="117" rx="13" ry="8" fill="url(#finnOG)" stroke={D} strokeWidth={SW - 0.4} />
+      <path d="M31 117 Q37 120 43 117" stroke={D} strokeWidth="1.8" fill="none" strokeLinecap="round" opacity="0.65" />
+      <path d="M65 117 Q71 120 77 117" stroke={D} strokeWidth="1.8" fill="none" strokeLinecap="round" opacity="0.65" />
+
+      {/* Ears — behind head */}
+      <path d="M 28 37 L 17 5 Q 40 9 45 30 Z" fill="url(#finnOG)" stroke={D} strokeWidth={SW} strokeLinejoin="round" />
+      <path d="M 29 34 L 22 12 Q 39 14 42 28 Z" fill={CR} />
+      <path d="M 80 37 L 91 5 Q 68 9 63 30 Z" fill="url(#finnOG)" stroke={D} strokeWidth={SW} strokeLinejoin="round" />
+      <path d="M 79 34 L 86 12 Q 69 14 66 28 Z" fill={CR} />
 
       {/* Head */}
-      <ellipse cx="40" cy="44" rx="26" ry="24" fill="#fb923c" />
+      <circle cx="54" cy="45" r="32" fill="url(#finnOG)" stroke={D} strokeWidth={SW} />
 
-      {/* White cheek patch / muzzle area */}
-      <ellipse cx="40" cy="54" rx="14" ry="11" fill="#fed7aa" />
+      {/* Muzzle */}
+      <ellipse cx="43" cy="59" rx="13" ry="11" fill={CR} />
+      <ellipse cx="65" cy="59" rx="13" ry="11" fill={CR} />
+      <ellipse cx="54" cy="60" rx="9" ry="10" fill={CR} />
 
-      {/* Eyes — mood-driven */}
-      {EYES[mood]}
+      <Eyes mood={mood} />
+      <Brows mood={mood} />
 
       {/* Nose */}
-      <ellipse cx="40" cy="49" rx="3" ry="2" fill="#1c1917" />
+      <path d="M49 64 Q54 69 59 64 Q59 59 54 58 Q49 59 49 64 Z" fill="#1A0800" />
+      <circle cx="51.5" cy="61" r="1.5" fill="white" opacity="0.45" />
 
-      {/* Mouth — mood-driven */}
-      {MOUTH[mood]}
+      <Mouth mood={mood} />
 
-      {/* Inner ear detail */}
-      <line x1="40" y1="49" x2="34" y2="54" stroke="#1c1917" strokeWidth="1" opacity="0.4" />
-      <line x1="40" y1="49" x2="46" y2="54" stroke="#1c1917" strokeWidth="1" opacity="0.4" />
+      {/* Whiskers */}
+      <path d="M44 62 L23 58" stroke={D} strokeWidth="1.3" strokeLinecap="round" opacity="0.5" />
+      <path d="M44 65 L23 65" stroke={D} strokeWidth="1.3" strokeLinecap="round" opacity="0.5" />
+      <path d="M64 62 L85 58" stroke={D} strokeWidth="1.3" strokeLinecap="round" opacity="0.5" />
+      <path d="M64 65 L85 65" stroke={D} strokeWidth="1.3" strokeLinecap="round" opacity="0.5" />
 
-      {/* Forehead stripe */}
-      <path d="M36 28 Q40 24 44 28" stroke="#ea580c" strokeWidth="2" strokeLinecap="round" fill="none" opacity="0.5" />
+      {mood === "thinking" && (
+        <>
+          <circle cx="82" cy="33" r="2.2" fill={D} opacity="0.22" />
+          <circle cx="89" cy="24" r="3" fill={D} opacity="0.18" />
+          <circle cx="97" cy="14" r="4" fill={D} opacity="0.14" />
+        </>
+      )}
     </svg>
   );
 }

@@ -29,7 +29,7 @@ export default async function LeaderboardPage() {
       <div className="text-center">
         <p className="text-xs font-semibold uppercase tracking-widest text-[var(--green)]">Hall of Fame</p>
         <h1 className="mt-2 text-4xl font-extrabold text-[var(--black)]">Leaderboard</h1>
-        <p className="mt-2 text-[var(--gray-500)]">Top learners ranked by total XP — keep grinding! 💪</p>
+        <p className="mt-2 text-[var(--gray-500)]">Top learners ranked by total XP — keep grinding!</p>
       </div>
 
       <div className="overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--white)] shadow-[var(--shadow-md)]">

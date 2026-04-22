@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Finn } from "@/components/mascot/finn";
 import { Button } from "@/components/ui/button";
 import { XpFloat } from "@/components/ui/xp-float";
+import { Icon } from "@/components/ui/icons";
 
 interface Challenge {
   id: string;
@@ -140,8 +141,8 @@ export function DailyChallenge({ isGuest = false }: { isGuest?: boolean }) {
             >
               <span className="mr-2 font-bold">{String.fromCharCode(65 + i)}.</span>
               {opt}
-              {variant === "correct" && " ✓"}
-              {variant === "wrong" && " ✗"}
+              {variant === "correct" && ""}
+              {variant === "wrong" && ""}
             </button>
           );
         })}
@@ -159,7 +160,7 @@ export function DailyChallenge({ isGuest = false }: { isGuest?: boolean }) {
           >
             <div className={`mt-4 rounded-xl p-4 ${result.correct ? "bg-[var(--green-bg)] border border-[var(--green-border)]" : "bg-amber-50 border border-amber-200"}`}>
               <p className={`text-sm font-bold ${result.correct ? "text-[var(--green-deeper)]" : "text-amber-700"}`}>
-                {result.correct ? "Correct! 🎉" : "Not quite — here's why:"}
+                {result.correct ? <span className="inline-flex items-center gap-1">Correct! <span className="text-[1.1em] text-[var(--color-primary)]"><Icon.StarFilled /></span></span> : "Not quite — here's why:"}
               </p>
               <p className="mt-1 text-sm text-[var(--gray-700)]">{result.explanation}</p>
               {result.correct && (

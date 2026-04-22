@@ -67,6 +67,51 @@ const topicAccents: Record<string, TopicAccent> = {
 export default function CurriculumPage() {
   const [open, setOpen] = useState<string | null>("Budgeting");
 
+  // Import curriculum map data (static import for now)
+  const ncCurriculum = [
+    { code: 'E.1.1', title: 'Types of Economies', file: 'E.1.1.md' },
+    { code: 'E.1.2', title: 'Market Structures', file: 'E.1.2.md' },
+    { code: 'E.1.3', title: 'Supply & Demand', file: 'E.1.3.md' },
+    { code: 'E.1.4', title: 'Incentives & Profits', file: 'E.1.4.md' },
+    { code: 'E.2.1', title: 'Macroeconomic Indicators', file: 'E.2.1.md' },
+    { code: 'E.2.2', title: 'Microeconomic Indicators', file: 'E.2.2.md' },
+    { code: 'E.2.3', title: 'Fiscal & Monetary Policy', file: 'E.2.3.md' },
+    { code: 'E.2.4', title: 'Economic Organizations', file: 'E.2.4.md' },
+    { code: 'E.3.1', title: 'Legal Structure & Property Rights', file: 'E.3.1.md' },
+    { code: 'E.3.2', title: 'Regulation', file: 'E.3.2.md' },
+    { code: 'E.3.3', title: 'Taxes & Government Services', file: 'E.3.3.md' },
+    { code: 'E.4.1', title: 'Trade & Interdependence', file: 'E.4.1.md' },
+    { code: 'E.4.2', title: 'NC in US/World Economy', file: 'E.4.2.md' },
+    { code: 'IE.1.1', title: 'Education, Income, Career, Lifestyle', file: 'IE.1.1.md' },
+    { code: 'IE.1.2', title: 'Career/Education Options', file: 'IE.1.2.md' },
+    { code: 'IE.1.3', title: 'Postsecondary Costs & Income', file: 'IE.1.3.md' },
+    { code: 'IE.1.4', title: 'Minimizing Education Costs', file: 'IE.1.4.md' },
+    { code: 'IE.1.5', title: 'Types of Income', file: 'IE.1.5.md' },
+    { code: 'IE.2.1', title: 'Payroll Deductions', file: 'IE.2.1.md' },
+    { code: 'IE.2.2', title: 'Types & Purposes of Taxes', file: 'IE.2.2.md' },
+    { code: 'IE.2.3', title: 'Tax Form Preparation', file: 'IE.2.3.md' },
+    { code: 'MCM.1.1', title: 'Creating a Spending Plan', file: 'MCM.1.1.md' },
+    { code: 'MCM.1.2', title: 'Critiquing Plans', file: 'MCM.1.2.md' },
+    { code: 'MCM.1.3', title: 'Renting, Leasing, Owning', file: 'MCM.1.3.md' },
+    { code: 'MCM.1.4', title: 'Mortgages', file: 'MCM.1.4.md' },
+    { code: 'MCM.2.1', title: 'Using Financial Services', file: 'MCM.2.1.md' },
+    { code: 'MCM.2.2', title: 'Interest & Fees', file: 'MCM.2.2.md' },
+    { code: 'MCM.2.3', title: 'Payment Methods', file: 'MCM.2.3.md' },
+    { code: 'MCM.3.1', title: 'Credit Sources', file: 'MCM.3.1.md' },
+    { code: 'MCM.3.2', title: 'Debt Management', file: 'MCM.3.2.md' },
+    { code: 'MCM.3.3', title: 'Debt Pros/Cons', file: 'MCM.3.3.md' },
+    { code: 'MCM.3.4', title: 'Insurance & Estate Planning', file: 'MCM.3.4.md' },
+    { code: 'FP.1.1', title: 'Investing Strategies', file: 'FP.1.1.md' },
+    { code: 'FP.1.2', title: 'Factors in Financial Planning', file: 'FP.1.2.md' },
+    { code: 'FP.1.3', title: 'Philanthropy & Community', file: 'FP.1.3.md' },
+    { code: 'CC.1.1', title: 'Advertising & Consumer Decisions', file: 'CC.1.1.md' },
+    { code: 'CC.1.2', title: 'Information for Decisions', file: 'CC.1.2.md' },
+    { code: 'CC.1.3', title: 'Consumer Impact on Economy', file: 'CC.1.3.md' },
+    { code: 'CC.2.1', title: 'Consumer Protection Laws', file: 'CC.2.1.md' },
+    { code: 'CC.2.2', title: 'Fraudulent Practices', file: 'CC.2.2.md' },
+    { code: 'CC.2.3', title: 'Consumer Self-Protection', file: 'CC.2.3.md' },
+  ];
+
   return (
     <div className="space-y-6">
       {/* Hero header */}
@@ -177,6 +222,44 @@ export default function CurriculumPage() {
           );
         })}
       </div>
+
+      {/* NC Curriculum Section */}
+      <section className="painted-surface surface-grid overflow-hidden rounded-3xl border border-[#e8dfcf] px-8 py-10 shadow-[var(--shadow-hero)]">
+        <p className="label-eyebrow mb-3">North Carolina</p>
+        <h2 className="text-3xl font-extrabold leading-tight md:text-4xl mb-2">NC Curriculum Lessons</h2>
+        <p className="mb-6 max-w-2xl text-base leading-relaxed text-[var(--color-text-secondary)]">
+          These lessons are fully aligned to the North Carolina Economics & Personal Finance (EPF) standards. Each module includes teacher notes, activities, and assessments. Click a lesson to view the teacher guide.
+        </p>
+        <div className="overflow-x-auto">
+          <table className="min-w-[600px] w-full border text-sm bg-white rounded-xl">
+            <thead>
+              <tr className="bg-[#f7f5ef] text-[var(--color-text-secondary)]">
+                <th className="px-3 py-2 text-left font-semibold">Code</th>
+                <th className="px-3 py-2 text-left font-semibold">Title</th>
+                <th className="px-3 py-2 text-left font-semibold">Teacher Module</th>
+              </tr>
+            </thead>
+            <tbody>
+              {ncCurriculum.map((mod) => (
+                <tr key={mod.code} className="border-t last:border-b">
+                  <td className="px-3 py-2 font-mono text-xs text-[var(--color-primary)]">{mod.code}</td>
+                  <td className="px-3 py-2">{mod.title}</td>
+                  <td className="px-3 py-2">
+                    <a
+                      href={`/epf-curriculum/${mod.file}`}
+                      className="text-[var(--color-primary)] underline hover:text-[var(--color-text-primary)]"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      View
+                    </a>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
     </div>
   );
 }

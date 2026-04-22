@@ -1,8 +1,11 @@
-import type { SVGProps } from "react";
-
-export type IconSVGProps = SVGProps<SVGSVGElement>;
-
 export const Icon = {
+  Flex: (p: IconSVGProps) => (
+    <svg viewBox="0 0 20 20" fill="none" aria-hidden {...p}>
+      <path d="M4 14c0-2 2-4 6-4s6 2 6 4" stroke="#0f766e" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M10 10v-2a2 2 0 1 1 4 0v2" stroke="#0f766e" strokeWidth="1.5" strokeLinecap="round" />
+      <circle cx="10" cy="16" r="2" fill="#0f766e" />
+    </svg>
+  ),
   Budget: (p: IconSVGProps) => (
     <svg viewBox="0 0 20 20" fill="none" aria-hidden {...p}>
       <rect x="3" y="10" width="3" height="7" rx="1" fill="currentColor" />

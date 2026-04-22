@@ -32,7 +32,7 @@ export function StreakShieldWidget({ shields, streakAtRisk = false, onShieldUsed
       <div className="flex gap-1">
         {Array.from({ length: 3 }).map((_, i) => (
           <span key={i} className={`text-xl ${i < localShields ? "opacity-100" : "opacity-20"}`} aria-hidden>
-            🛡️
+            
           </span>
         ))}
       </div>
@@ -57,7 +57,7 @@ export function StreakShieldWidget({ shields, streakAtRisk = false, onShieldUsed
       )}
       {used && (
         <span className="shrink-0 rounded-lg bg-[var(--green-bg)] px-3 py-1.5 text-xs font-bold text-[var(--green-deeper)]">
-          Streak saved! ✓
+          Streak saved!
         </span>
       )}
     </div>

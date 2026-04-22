@@ -18,6 +18,14 @@ import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { AvatarBuilder } from "@/components/profile/avatar-builder";
+import { ShareStatsCard } from "@/components/profile/share-stats-card";
+import { MoneyGoalsTracker } from "@/components/profile/money-goals-tracker";
+import { LessonHistory } from "@/components/profile/lesson-history";
+import { AchievementBadge } from "@/components/profile/achievement-badge";
+import { ProfileSettings } from "@/components/profile/profile-settings";
+import { AnimalCard } from "@/components/cards/animal-card";
+import { ALL_CARDS } from "@/lib/cards";
 
 type LessonProgressRow = {
   id: string;
@@ -224,7 +232,7 @@ export default async function DashboardPage() {
   ]);
 
   const recentLessons = (lessonRows ?? []) as LessonProgressRow[];
-  const displayName = profile?.display_name || auth.user.email || "Student";
+  const displayName = profile?.display_name || "Student";
   const xp = profile?.xp ?? 0;
   const streak = profile?.streak_current ?? 0;
   const streakShields = profile?.streak_shields ?? 0;
@@ -240,11 +248,14 @@ export default async function DashboardPage() {
       : 0;
   const completionRate =
     totalAttempts > 0 ? Math.round((completedTotal / totalAttempts) * 100) : 0;
-  const nextLesson =
-    recentLessons.find((row) => row.status !== "completed") ?? recentLessons[0];
-  const nextLessonMeta = nextLesson ? readLessonMeta(nextLesson.lessons) : null;
-  const nextLessonHref =
-    nextLessonMeta?.slug ? `/learn/${nextLessonMeta.slug}` : "/learn";
+  let nextLesson: LessonProgressRow | undefined = undefined;
+  let nextLessonMeta = { slug: "", title: "Untitled lesson" };
+  let nextLessonHref = "/learn";
+  if (Array.isArray(recentLessons) && recentLessons.length > 0) {
+    nextLesson = recentLessons.find((row) => row.status !== "completed") ?? recentLessons[0];
+    nextLessonMeta = nextLesson ? readLessonMeta(nextLesson.lessons) : { slug: "", title: "Untitled lesson" };
+    nextLessonHref = typeof nextLessonMeta?.slug === "string" && nextLessonMeta.slug.length > 0 ? `/learn/${nextLessonMeta.slug}` : "/learn";
+  }
 
   return (
     <div className="space-y-6 pb-4">
@@ -257,23 +268,19 @@ export default async function DashboardPage() {
 
         <div className="relative grid gap-8 xl:grid-cols-[minmax(0,1.4fr)_380px] xl:items-center">
           <div>
-            <Badge className="border-transparent bg-white/75 text-[var(--green-deeper)] shadow-[var(--shadow-sm)]">
-              Student control center
-            </Badge>
-            <h1 className="mt-4 max-w-3xl font-[var(--font-display)] text-4xl font-black leading-[0.95] tracking-[-0.05em] text-[var(--color-text-primary)] sm:text-5xl lg:text-[3.6rem]">
-              A dashboard that actually feels worth opening.
+            <h1 className="mt-2 max-w-3xl font-[var(--font-display)] text-4xl font-black leading-[0.95] tracking-[-0.05em] text-[var(--color-text-primary)] sm:text-5xl lg:text-[3.6rem]">
+              Welcome back, {displayName}!
             </h1>
             <p className="mt-4 max-w-2xl text-base leading-7 text-[var(--color-text-secondary)] sm:text-lg">
-              Welcome back, {displayName}. Your streak, lesson flow, money goals,
-              and next actions are all in one sharper, calmer workspace now.
+              Your money journey, streaks, goals, and next steps—all in one place. Jump in, track your progress, and level up your financial game.
             </p>
 
             <div className="mt-7 flex flex-wrap gap-3">
               <Button asChild size="lg" className="rounded-full px-6">
-                <Link href={nextLessonHref}>
-                  {nextLessonMeta ? "Resume your next lesson" : "Browse lessons"}
+                <a href={nextLessonHref} className="!text-white">
+                  {nextLessonMeta && nextLessonMeta.slug ? "Resume your next lesson" : "Browse lessons"}
                   <ArrowRight className="h-4 w-4" />
-                </Link>
+                </a>
               </Button>
               <Button
                 asChild
@@ -281,7 +288,7 @@ export default async function DashboardPage() {
                 size="lg"
                 className="rounded-full border-white/80 bg-white/70 px-6 backdrop-blur"
               >
-                <Link href="/simulator">Open spending simulator</Link>
+                <a href="/simulator">Open spending simulator</a>
               </Button>
             </div>
 
@@ -483,7 +490,7 @@ export default async function DashboardPage() {
                   progress feed instead of empty chrome.
                 </p>
                 <Button asChild className="mt-6 rounded-full px-6">
-                  <Link href="/learn">Start learning</Link>
+                  <a href="/learn">Start learning</a>
                 </Button>
               </div>
             ) : (
@@ -643,6 +650,97 @@ export default async function DashboardPage() {
           </Card>
         </div>
       </section>
+      {/* --- Card Collection Teaser --- */}
+      <section className="relative overflow-hidden rounded-[32px] border border-amber-200/60 bg-[linear-gradient(135deg,rgba(255,251,235,0.98),rgba(254,243,199,0.9))] p-6 shadow-[0_30px_60px_-40px_rgba(245,158,11,0.35)]">
+        <div className="pointer-events-none absolute right-0 top-0 h-48 w-48 rounded-full bg-[rgba(245,158,11,0.1)] blur-3xl" />
+        <div className="pointer-events-none absolute bottom-0 left-0 h-32 w-32 rounded-full bg-[rgba(139,92,246,0.08)] blur-2xl" />
+        <div className="relative">
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-amber-700">
+                ✦ Collectible Cards
+              </p>
+              <h2 className="mt-2 text-2xl font-black tracking-[-0.04em] text-[var(--color-text-primary)]">
+                The Animal Roster
+              </h2>
+              <p className="mt-2 max-w-lg text-sm leading-6 text-[var(--color-text-secondary)]">
+                Earn cards by completing lessons and challenges. 7 characters, 4 rarities — trade with friends and build your deck.
+              </p>
+            </div>
+            <Link
+              href="/cards"
+              className="inline-flex items-center gap-2 rounded-full border border-amber-300 bg-white/80 px-4 py-2 text-sm font-bold text-amber-700 shadow-sm transition hover:bg-amber-50"
+            >
+              View all cards
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+          <div className="mt-6 flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
+            {ALL_CARDS.filter((_, i) => [0, 5, 8, 13, 19].includes(i)).map((card) => (
+              <AnimalCard key={card.id} card={card} size="sm" />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* --- Additional Features Section --- */}
+      <div className="mt-12 grid gap-8 xl:grid-cols-2">
+        <div className="space-y-8">
+          {/* Avatar Builder */}
+          <Card className="p-0 overflow-visible">
+            <div className="p-6">
+              <AvatarBuilder userXp={xp} />
+            </div>
+          </Card>
+
+          {/* Share Your Stats */}
+          <ShareStatsCard displayName={displayName} xp={xp} streak={streak} level={levelLabel} />
+
+          {/* Money Goals */}
+          <MoneyGoalsTracker />
+        </div>
+        <div className="space-y-8">
+          {/* Achievements */}
+          <Card className="p-6">
+            <h2 className="text-xl font-bold mb-4">Achievements</h2>
+            <div className="grid gap-4 md:grid-cols-2">
+              {/* Example badges, replace with dynamic data if available */}
+              <AchievementBadge title="Both Worlds" unlocked={false} />
+              <AchievementBadge title="Budget Boss" unlocked={false} />
+              <AchievementBadge title="Compound Explorer" unlocked={false} />
+              <AchievementBadge title="Finance Pro" unlocked={false} />
+              <AchievementBadge title="First Step" unlocked={false} />
+              <AchievementBadge title="Global Citizen" unlocked={false} />
+              <AchievementBadge title="Month Master" unlocked={false} />
+              <AchievementBadge title="Quiz Ace" unlocked={false} />
+              <AchievementBadge title="Saver" unlocked={false} />
+              <AchievementBadge title="Sharing is Caring" unlocked={false} />
+              <AchievementBadge title="Speed Learner" unlocked={false} />
+              <AchievementBadge title="Week Warrior" unlocked={false} />
+            </div>
+          </Card>
+
+          {/* Lesson History */}
+          <Card className="p-6">
+            <h2 className="text-xl font-bold mb-4">Lesson history</h2>
+            {/* Pass empty array or fetch real data as needed */}
+            <LessonHistory rows={[]} />
+          </Card>
+
+          {/* Profile Settings */}
+          <Card className="p-6">
+            <h2 className="text-xl font-bold mb-4">Settings</h2>
+            {/* Example props, replace with real user data */}
+            <ProfileSettings
+              initialDisplayName={displayName}
+              initialAgeTier={profile?.age_tier || "13-17"}
+              initialCurrency={"USD"}
+              initialStreakNotify={true}
+              initialWeeklyNotify={true}
+            />
+          </Card>
+        </div>
+      </div>
     </div>
   );
 }

@@ -108,7 +108,7 @@ export function SignupForm() {
           Create your Finly account
         </div>
         <div className="space-y-3">
-          <Input placeholder="Display name" value={displayName} onChange={(e) => setDisplayName(e.target.value)} required />
+          <Input placeholder="Display name (username)" value={displayName} onChange={(e) => setDisplayName(e.target.value)} required minLength={2} maxLength={32} />
           <Input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
           <div>
             <Input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />

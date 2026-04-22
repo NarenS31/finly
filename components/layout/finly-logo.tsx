@@ -17,7 +17,13 @@ export function FinlyLogo({ size = "md", variant = "dark" }: { size?: "sm" | "md
       className={cn("shrink-0")}
       aria-label="Finly"
     >
-      <rect x="0" y="6" width="16" height="16" rx="4" fill="#22c55e" />
+      <defs>
+        <linearGradient id="finlyMarkGradient" x1="0" y1="6" x2="16" y2="22" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#22c55e" />
+          <stop offset="1" stopColor="#16a34a" />
+        </linearGradient>
+      </defs>
+      <rect x="0" y="6" width="16" height="16" rx="4" fill="url(#finlyMarkGradient)" />
       <rect x="4" y="2" width="8" height="8" rx="2" fill="#16a34a" />
       <path d="M5 14h6M8 11v6" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" />
       <text
@@ -32,7 +38,7 @@ export function FinlyLogo({ size = "md", variant = "dark" }: { size?: "sm" | "md
         fin
       </text>
       <text
-        x="44"
+        x="41"
         y="20"
         style={{ fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" }}
         fontWeight="900"
@@ -42,21 +48,7 @@ export function FinlyLogo({ size = "md", variant = "dark" }: { size?: "sm" | "md
       >
         ly
       </text>
-      <circle
-        cx="80"
-        cy="14"
-        r="5"
-        fill={markLight ? "rgba(255,255,255,0.12)" : "#f0fdf4"}
-        stroke={markLight ? "rgba(255,255,255,0.35)" : "#bbf7d0"}
-        strokeWidth="1.5"
-      />
-      <path
-        d="M77.5 14l2 2 3.5-3.5"
-        stroke="#22c55e"
-        strokeWidth="1.4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+      {/* Removed check mark from logo */}
     </svg>
   );
 }

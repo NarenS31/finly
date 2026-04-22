@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Icon } from "@/components/ui/icons";
 import { BookOpen, Target, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -36,14 +37,14 @@ export default async function HomePage() {
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Button
-                asChild
-                className="bg-[var(--color-primary)] text-white shadow-[0_12px_26px_rgba(15,118,110,0.28)] hover:brightness-110"
-              >
-                <Link href="/learn">Start learning</Link>
-              </Button>
-              <Button asChild variant="ghost">
-                <Link href="/curriculum">See the curriculum</Link>
-              </Button>
+                  asChild
+                  className="bg-[var(--color-primary)] text-white shadow-[0_12px_26px_rgba(15,118,110,0.28)] hover:brightness-110"
+                >
+                  <a href="/learn">Start learning</a>
+                </Button>
+                <Button asChild variant="ghost">
+                  <a href="/curriculum">See the curriculum</a>
+                </Button>
             </div>
             <p className="mt-8 text-sm text-[var(--color-text-secondary)]">
               Free · No account required ·{" "}
@@ -89,7 +90,7 @@ export default async function HomePage() {
         </h2>
         <div className="mt-8 grid gap-3 md:grid-cols-2 lg:grid-cols-4">
           {Object.entries(topicMeta).map(([key, value]) => (
-            <Link href="/learn" key={key}>
+            <a href="/learn" key={key}>
               <div className="group rounded-2xl border border-[#e8dfcf] bg-white p-5 transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-elevated)]">
                 <div
                   className={`mb-4 h-1 w-10 rounded-full bg-gradient-to-r ${value.color}`}
@@ -101,7 +102,7 @@ export default async function HomePage() {
                   {value.blurb}
                 </p>
               </div>
-            </Link>
+            </a>
           ))}
         </div>
       </section>
@@ -114,7 +115,7 @@ export default async function HomePage() {
             <h2 className="mt-2 text-3xl font-bold">Popular lessons</h2>
           </div>
           <Button asChild variant="ghost">
-            <Link href="/learn">View all</Link>
+            <a href="/learn">View all</a>
           </Button>
         </div>
         <div className="grid gap-4 lg:grid-cols-3">
@@ -133,7 +134,7 @@ export default async function HomePage() {
                 {lesson.description}
               </p>
               <Button asChild className="mt-6">
-                <Link href={`/learn/${lesson.slug}`}>Open lesson</Link>
+                <a href={`/learn/${lesson.slug}`}>Open lesson</a>
               </Button>
             </div>
           ))}
@@ -156,11 +157,11 @@ export default async function HomePage() {
 
       {/* ── Leaderboard teaser ───────────────────────────────── */}
       <section className="rounded-2xl border border-[#e8dfcf] bg-white p-6 text-center">
-        <p className="text-2xl">🏆</p>
+        <p className="flex justify-center"><span className="inline-block text-[2rem] text-[var(--color-primary)]"><Icon.Trophy /></span></p>
         <h2 className="mt-2 text-xl font-bold">Think you're the best?</h2>
         <p className="mt-1 text-sm text-[var(--color-text-secondary)]">Compete with learners worldwide. Top 50 ranked by XP.</p>
         <Button asChild variant="ghost" className="mt-4">
-          <Link href="/leaderboard">See the leaderboard →</Link>
+          <a href="/leaderboard">See the leaderboard →</a>
         </Button>
       </section>
 
@@ -175,7 +176,7 @@ export default async function HomePage() {
             </p>
           </div>
           <Button asChild variant="secondary" className="shrink-0">
-            <Link href="/learn">Browse lessons</Link>
+            <a href="/learn" className="!text-white">Browse lessons</a>
           </Button>
         </div>
       </section>

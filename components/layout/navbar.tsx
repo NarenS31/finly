@@ -2,10 +2,12 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Menu, Sparkles, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { AgeTierToggle } from "@/components/layout/age-tier-toggle";
 import { Button } from "@/components/ui/button";
+import { FinlyLogoLowebase } from "@/components/layout/finly-logo-lowebase";
+import { FinlyLogo } from "@/components/layout/finly-logo";
 
 export function Navbar() {
   const pathname = usePathname();
@@ -24,10 +26,7 @@ export function Navbar() {
     <header className="sticky top-0 z-40 px-3 pt-3 sm:px-5 lg:px-8">
       <nav className="mx-auto flex w-full max-w-[1200px] items-center justify-between rounded-2xl border border-[#e8dfcf] bg-[rgba(255,252,246,0.92)] px-4 py-3 shadow-[0_4px_16px_rgba(31,41,55,0.07)] backdrop-blur-xl">
         <Link href="/" className="flex items-center gap-3 text-xl font-extrabold tracking-tight text-[var(--color-text-primary)]">
-          <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-[var(--color-primary)] text-white shadow-[0_10px_24px_rgba(15,118,110,0.35)]">
-            <Sparkles className="h-5 w-5" />
-          </span>
-          <span className="font-[var(--font-display)] text-2xl">Finly</span>
+          <FinlyLogo size="md" />
         </Link>
 
         <div className="hidden items-center gap-2 rounded-full bg-white/70 p-1 lg:flex">

@@ -37,7 +37,26 @@ export function Button({ className, variant = "primary", size = "md", ...props }
     className
   );
 
-  if (asChild && React.isValidElement(children)) {
+
+  if (asChild) {
+    if (!React.isValidElement(children)) {
+      // Always show a warning in dev, and render a visible fallback in prod too
+      if (process.env.NODE_ENV !== "production") {
+        // eslint-disable-next-line no-console
+        console.warn(
+          "[Button] asChild=true but child is not a valid React element. Rendering fallback <button>. Child:",
+          children
+        );
+      }
+      return (
+        <button type={type ?? "button"} className={buttonClassName} {...restProps}>
+          {/* Fallback: show warning in UI for easier debugging */}
+          <span style={{ color: 'red', fontWeight: 600 }}>
+            Invalid Button child (asChild=true): must be a React element like {'<a>'}
+          </span>
+        </button>
+      );
+    }
     return React.cloneElement(children as React.ReactElement<{ className?: string }>, {
       className: cn(buttonClassName, (children.props as { className?: string }).className),
     });

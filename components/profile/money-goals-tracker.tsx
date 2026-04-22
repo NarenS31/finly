@@ -73,7 +73,7 @@ export function MoneyGoalsTracker() {
   return (
     <section>
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-[var(--black)]">💰 Money Goals</h2>
+        <h2 className="text-2xl font-bold text-[var(--black)]">Money Goals</h2>
         <button
           onClick={() => setAdding((v) => !v)}
           className="rounded-lg bg-[var(--green)] px-3 py-1.5 text-sm font-bold text-white hover:bg-[var(--green-dark)]"
@@ -132,7 +132,7 @@ export function MoneyGoalsTracker() {
         </div>
       ) : goals.length === 0 ? (
         <div className="rounded-2xl border border-[var(--border)] p-8 text-center text-[var(--gray-500)]">
-          <p className="text-3xl mb-2">🎯</p>
+          <p className="text-3xl mb-2"></p>
           <p className="font-semibold">No goals yet</p>
           <p className="text-sm mt-1">Add your first savings goal above!</p>
         </div>
@@ -149,7 +149,7 @@ export function MoneyGoalsTracker() {
                 <div className="flex items-start justify-between">
                   <div>
                     <p className="font-bold text-[var(--black)]">
-                      {goal.completed && "✅ "}
+                      {goal.completed && ""}
                       {goal.title}
                     </p>
                     <p className="mt-0.5 text-xs text-[var(--gray-500)]">
@@ -164,7 +164,7 @@ export function MoneyGoalsTracker() {
                       className="text-xs text-[var(--gray-400)] hover:text-red-500"
                       aria-label="Delete goal"
                     >
-                      ✕
+                      
                     </button>
                   </div>
                 </div>
