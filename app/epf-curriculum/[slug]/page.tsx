@@ -20,24 +20,16 @@ import {
   h3,
 } from "@/components/lesson/mdx-components";
 
+
 import { epfCurriculumFiles } from "@/content/epf-curriculum/index";
 import matter from "gray-matter";
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const { slug } = params;
-  const filePath = path.join(process.cwd(), "content/epf-curriculum", `${slug}.md`);
-  try {
-    const source = fs.readFileSync(filePath, "utf8");
-    const { data } = matter(source);
-    return {
-      title: data.title || slug,
-      description: data.description || "",
-    };
-  } catch {
-    return { title: "Lesson | Finly" };
-  }
+  // Optionally, you can use dynamic import for metadata as well, or just return a generic title
+  return { title: params.slug };
 }
 
+
+export default async function LessonPage({ params }: { params: { slug: string } }) {
   const { slug } = params;
   try {
     const mod = epfCurriculumFiles[slug];
