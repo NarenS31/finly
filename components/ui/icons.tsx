@@ -39,4 +39,5 @@ export const Icon = {
   ),
 
   // ICONS TEMPORARILY COMMENTED OUT TO PREVENT BUILD ERRORS
+  // export const Icon = { ... };
     <svg viewBox="0 0 20 20" fill="none" aria-hidden {...p}>

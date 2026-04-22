@@ -7,7 +7,7 @@ import { AnimalArt } from "./animal-art";
 /* ── Element icon ── */
 function ElementIcon({ element, size = 18 }: { element: string; size?: number }) {
   const cfg = ELEMENT_CONFIG[element as keyof typeof ELEMENT_CONFIG];
-  // const symbols: Record<string, JSX.Element> = {
+  const symbols: Record<string, JSX.Element> = {
     fire: (
       <svg viewBox="0 0 16 16" width={size - 4} height={size - 4}>
         <path d="M8 14 C4 14 2 11 2 8 C2 5 4 3 6 2 C5.5 4 6.5 5 8 5 C7 3.5 7.5 2 9 1 C10 3 11 4.5 10.5 6.5 C12 5.5 12.5 4 12 3 C14 5 14 8 13 10 C12 13 10 14 8 14Z" fill="white"/>
@@ -47,6 +47,7 @@ function ElementIcon({ element, size = 18 }: { element: string; size?: number })
       </svg>
     ),
   };
+  // const symbols = { ... };
   return (
     <span
       className="inline-flex items-center justify-center rounded-full"
