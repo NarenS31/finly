@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import fs from "node:fs";
-import path from "node:path";
 import type { ComponentProps } from "react";
+import Link from "next/link";
 import { compileMDX } from "next-mdx-remote/rsc";
 import { notFound } from "next/navigation";
 import { LessonViewer } from "@/components/lesson/lesson-viewer";
@@ -9,6 +8,7 @@ import { extractHeadings } from "@/lib/utils/content";
 import { topicMeta } from "@/lib/data/site";
 import { createClient } from "@/lib/supabase/server";
 import { QuizQuestion } from "@/components/interactive/quiz-question";
+import { Button } from "@/components/ui/button";
 import {
   ConceptCard,
   InteractiveCalculator,
@@ -20,47 +20,24 @@ import {
   h2,
   h3,
 } from "@/components/lesson/mdx-components";
-import matter from "gray-matter";
-
-const epfCurriculumDir = path.join(process.cwd(), "content", "epf-curriculum");
-
-function getEpfCurriculumSource(slug: string) {
-  const filePath = path.join(epfCurriculumDir, `${slug}.mdx`);
-  if (!fs.existsSync(filePath)) {
-    throw new Error(`Lesson not found for slug: ${slug}`);
-  }
-
-  return fs.readFileSync(filePath, "utf8");
-}
-
-function isMissingLessonError(error: unknown, slug: string) {
-  return error instanceof Error && error.message === `Lesson not found for slug: ${slug}`;
-}
+import { getEpfCurriculumModule, isMissingEpfLessonError } from "@/lib/utils/epf-curriculum";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  return { title: `${slug} | Finly` };
+  try {
+    const module = getEpfCurriculumModule(slug);
+    return { title: `${module.meta.title} | Finly` };
+  } catch {
+    return { title: `${slug} | Finly` };
+  }
 }
 
 export default async function LessonPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   try {
-    const source = getEpfCurriculumSource(slug);
-    const { data, content: rawContent } = matter(source);
-    const headings = extractHeadings(rawContent);
-    // Fallbacks for meta fields
-    const meta = {
-      slug,
-      title: (data as any)?.title ?? slug,
-      description: (data as any)?.description ?? "",
-      topic: (data as any)?.topic ?? "money_basics",
-      ageTier: (data as any)?.ageTier ?? "13-17",
-      difficulty: (data as any)?.difficulty ?? "beginner",
-      estimatedMinutes: (data as any)?.estimatedMinutes ?? 5,
-      keyTakeaways: (data as any)?.keyTakeaways ?? [],
-      xpReward: (data as any)?.xpReward ?? 10,
-      quizCount: (data as any)?.quizCount ?? 0,
-    };
+    const module = getEpfCurriculumModule(slug);
+    const headings = extractHeadings(module.content);
+    const meta = module.meta;
     const topicLabel = topicMeta[meta.topic]?.label ?? meta.topic;
     const supabase = await createClient();
     const { data: lessonRow } = await supabase
@@ -71,7 +48,7 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
       .maybeSingle();
 
     const { content } = await compileMDX({
-      source: rawContent,
+      source: module.content,
       options: { parseFrontmatter: false },
       components: {
         ConceptCard,
@@ -104,14 +81,23 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
           relatedLessons={[]}
           keyTakeaways={meta.keyTakeaways ?? []}
           xpReward={meta.xpReward ?? 10}
-          quizCount={meta.quizCount ?? 0}
+          quizCount={0}
+          backHref="/curriculum"
+          backLabel="Back to curriculum"
         >
           {content}
         </LessonViewer>
+        {module.quizPrompts.length > 0 ? (
+          <div className="mx-auto mt-10 max-w-[720px] text-center">
+            <Button asChild>
+              <Link href={`/epf-curriculum/${slug}/quiz`}>Open module questions ({module.quizPrompts.length}) →</Link>
+            </Button>
+          </div>
+        ) : null}
       </div>
     );
   } catch (err) {
-    if (isMissingLessonError(err, slug)) {
+    if (isMissingEpfLessonError(err, slug)) {
       notFound();
     }
     throw err;

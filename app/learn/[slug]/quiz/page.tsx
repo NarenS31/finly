@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { LessonQuizClient } from "@/components/lesson/lesson-quiz-client";
-import { extractQuizQuestionsFromMdx } from "@/lib/utils/extract-quiz-from-mdx";
+import { extractHeadings } from "@/lib/utils/content";
+import { buildLessonQuizPrompts } from "@/lib/utils/quiz-prompts";
 import { getAllLessons, getLessonBySlug, getLessonSlugs } from "@/lib/utils/lessons";
 import { createClient } from "@/lib/supabase/server";
 
@@ -13,7 +14,13 @@ export default async function LessonQuizPage({ params }: { params: Promise<{ slu
 
   try {
     const lesson = getLessonBySlug(slug);
-    const questions = extractQuizQuestionsFromMdx(lesson.content);
+    const questions = buildLessonQuizPrompts({
+      title: lesson.meta.title,
+      description: lesson.meta.description,
+      keyTakeaways: lesson.meta.keyTakeaways ?? [],
+      headings: extractHeadings(lesson.content),
+      content: lesson.content,
+    });
     const lessons = getAllLessons();
     const idx = lessons.findIndex((l) => l.slug === slug);
     const nextLessonSlug = idx >= 0 && idx < lessons.length - 1 ? lessons[idx + 1]?.slug ?? null : null;

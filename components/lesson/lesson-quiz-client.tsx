@@ -1,14 +1,15 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { ProgressBar } from "@/components/lesson/progress-bar";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icons";
 import { useAuth } from "@/lib/hooks/use-auth";
-import type { ExtractedQuizQuestion } from "@/lib/utils/extract-quiz-from-mdx";
+import { countGradablePrompts } from "@/lib/utils/quiz-prompts";
+import type { LessonQuizPrompt } from "@/types";
 
 function starCount(pct: number) {
   if (pct >= 100) return 3;
@@ -32,6 +33,12 @@ function useCountUp(target: number, active: boolean, ms = 900) {
   return v;
 }
 
+type PromptResponse = {
+  selected?: number;
+  text?: string;
+  correct?: boolean;
+};
+
 export function LessonQuizClient({
   slug,
   title,
@@ -44,7 +51,7 @@ export function LessonQuizClient({
   title: string;
   lessonId: string | null;
   xpReward: number;
-  questions: ExtractedQuizQuestion[];
+  questions: LessonQuizPrompt[];
   nextLessonSlug: string | null;
 }) {
   const router = useRouter();
@@ -52,31 +59,32 @@ export function LessonQuizClient({
   const [phase, setPhase] = useState<"quiz" | "done">("quiz");
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState(1);
-  const [answers, setAnswers] = useState<{ selected: number; correct: boolean }[]>([]);
+  const [responses, setResponses] = useState<PromptResponse[]>([]);
   const [selected, setSelected] = useState<number | null>(null);
+  const [textResponse, setTextResponse] = useState("");
   const [revealed, setRevealed] = useState(false);
   const [flash, setFlash] = useState<"ok" | "bad" | null>(null);
 
   const q = questions[index];
   const total = questions.length;
-
+  const gradableTotal = countGradablePrompts(questions);
   const score = useMemo(
-    () => answers.reduce((acc, a) => acc + (a.correct ? 1 : 0), 0),
-    [answers]
+    () => responses.reduce((acc, response) => acc + (response.correct ? 1 : 0), 0),
+    [responses]
   );
 
-  const pct = total > 0 ? Math.round((score / total) * 100) : 0;
+  const pct = gradableTotal > 0 ? Math.round((score / gradableTotal) * 100) : 100;
   const displayScore = useCountUp(score, phase === "done");
 
   const xpPreview = useMemo(() => {
     let xp = xpReward;
     xp += score;
-    if (total > 0 && score === total) xp += 5;
+    if (gradableTotal > 0 && score === gradableTotal) xp += 5;
     return xp;
-  }, [xpReward, score, total]);
+  }, [xpReward, score, gradableTotal]);
 
   useEffect(() => {
-    if (phase !== "done" || !user || !lessonId || total === 0) return;
+    if (phase !== "done" || !user || !lessonId || gradableTotal === 0) return;
     void (async () => {
       await fetch("/api/quiz-result", {
         method: "POST",
@@ -85,33 +93,48 @@ export function LessonQuizClient({
           lessonId,
           slug,
           correct: score,
-          total,
+          total: gradableTotal,
         }),
       }).catch(() => {});
     })();
-  }, [phase, user, lessonId, slug, score, total]);
+  }, [phase, user, lessonId, slug, score, gradableTotal]);
 
-  const goNext = useCallback(() => {
-    if (selected === null || !q) return;
+  const canContinue =
+    q?.type === "multiple_choice" ? selected !== null : textResponse.trim().length > 0;
+
+  const revealAnswer = () => {
+    if (!q || q.type !== "multiple_choice" || selected === null) return;
     const ok = selected === q.correct;
     setFlash(ok ? "ok" : "bad");
     setRevealed(true);
-  }, [q, selected]);
+  };
 
-  const advance = useCallback(() => {
-    if (!q || selected === null) return;
-    const ok = selected === q.correct;
-    setAnswers((a) => [...a, { selected, correct: ok }]);
+  const advance = () => {
+    if (!q) return;
+
+    const nextResponses = [...responses];
+    if (q.type === "multiple_choice") {
+      if (selected === null) return;
+      nextResponses.push({ selected, correct: selected === q.correct });
+    } else {
+      if (!textResponse.trim()) return;
+      nextResponses.push({ text: textResponse.trim() });
+    }
+
+    setResponses(nextResponses);
     setSelected(null);
+    setTextResponse("");
     setRevealed(false);
     setFlash(null);
+
     if (index + 1 >= total) {
       setPhase("done");
       return;
     }
+
     setDirection(1);
-    setIndex((i) => i + 1);
-  }, [q, selected, index, total]);
+    setIndex((value) => value + 1);
+  };
 
   if (total === 0) {
     return (
@@ -136,33 +159,47 @@ export function LessonQuizClient({
           <p className="text-sm font-semibold uppercase tracking-widest text-[var(--color-primary)]">Quiz complete</p>
           <h1 className="mt-2 font-[var(--font-display)] text-3xl font-bold text-[var(--color-text-primary)]">{title}</h1>
           <p className="mt-6 text-5xl font-extrabold tabular-nums text-[var(--color-text-primary)]">
-            {displayScore} / {total}
+            {displayScore} / {gradableTotal || total}
           </p>
-            <div className="mt-4 flex justify-center gap-1">
-              {[1, 2, 3].map((s) => (
-                <Icon.StarFilled
-                  key={s}
-                  className={`h-10 w-10 ${s <= stars ? "text-[#fbbf24]" : "text-[var(--gray-200)]"}`}
-                />
-              ))}
-            </div>
+          <div className="mt-4 flex justify-center gap-1">
+            {[1, 2, 3].map((s) => (
+              <Icon.StarFilled
+                key={s}
+                className={`h-10 w-10 ${s <= stars ? "text-[#fbbf24]" : "text-[var(--gray-200)]"}`}
+              />
+            ))}
+          </div>
           <p className="mt-4 text-sm text-[var(--color-text-secondary)]">
-            If this were your first lesson completion, you would earn about <strong>{xpPreview} XP</strong> (includes quiz bonuses).
+            {gradableTotal > 0
+              ? `You answered ${score} of ${gradableTotal} auto-graded questions correctly and completed ${total} prompts total.`
+              : `You completed all ${total} prompts in this lesson review.`}
           </p>
+          {gradableTotal > 0 ? (
+            <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
+              If this were your first lesson completion, you would earn about <strong>{xpPreview} XP</strong> (includes quiz bonuses).
+            </p>
+          ) : null}
+
           <ul className="mt-8 space-y-4 text-left text-sm">
-            {questions.map((qq, i) => {
-              const a = answers[i];
-              const wrong = a && !a.correct;
+            {questions.map((prompt, promptIndex) => {
+              const response = responses[promptIndex];
+              const wrong = response?.correct === false;
               return (
-                <li key={i} className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg)] p-4">
-                  <p className="font-medium text-[var(--color-text-primary)]">{qq.question}</p>
-                  <p className="mt-1 text-[var(--color-text-muted)]">
-                    Your answer: {qq.options[a?.selected ?? 0] ?? "—"}
-                  </p>
-                  <p className="text-[var(--color-text-secondary)]">Correct: {qq.options[qq.correct]}</p>
-                  {wrong && qq.explanation ? (
-                    <p className="mt-2 text-[var(--color-text-secondary)]">{qq.explanation}</p>
-                  ) : null}
+                <li key={promptIndex} className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg)] p-4">
+                  <p className="font-medium text-[var(--color-text-primary)]">{prompt.prompt}</p>
+                  {prompt.type === "multiple_choice" ? (
+                    <>
+                      <p className="mt-1 text-[var(--color-text-muted)]">
+                        Your answer: {typeof response?.selected === "number" ? prompt.options[response.selected] : "—"}
+                      </p>
+                      <p className="text-[var(--color-text-secondary)]">Correct: {prompt.options[prompt.correct]}</p>
+                      {wrong && prompt.explanation ? (
+                        <p className="mt-2 text-[var(--color-text-secondary)]">{prompt.explanation}</p>
+                      ) : null}
+                    </>
+                  ) : (
+                    <p className="mt-2 text-[var(--color-text-secondary)]">{response?.text ?? "No response"}</p>
+                  )}
                 </li>
               );
             })}
@@ -173,9 +210,11 @@ export function LessonQuizClient({
               onClick={() => {
                 setPhase("quiz");
                 setIndex(0);
-                setAnswers([]);
+                setResponses([]);
                 setSelected(null);
+                setTextResponse("");
                 setRevealed(false);
+                setFlash(null);
               }}
             >
               Retake quiz
@@ -198,7 +237,7 @@ export function LessonQuizClient({
     );
   }
 
-  const progressPct = ((index + (revealed ? 1 : 0)) / total) * 100;
+  const progressPct = ((index + (revealed || q?.type === "short_answer" ? 1 : 0)) / total) * 100;
 
   return (
     <div className="mx-auto flex min-h-[100dvh] max-w-[600px] flex-col px-4 py-8">
@@ -228,47 +267,75 @@ export function LessonQuizClient({
           <p className="text-xs font-semibold text-[var(--color-text-muted)]">
             Question {index + 1} of {total}
           </p>
-          <h2 className="mt-3 text-xl font-bold text-[var(--color-text-primary)]">{q.question}</h2>
-          <div className="mt-5 grid gap-3">
-            {q.options.map((option, i) => {
-              const isSel = selected === i;
-              const showResult = revealed;
-              const isCorrect = i === q.correct;
-              const tone =
-                showResult && isSel
-                  ? isCorrect
-                    ? "border-emerald-400 bg-emerald-100 text-emerald-900"
-                    : "border-red-400 bg-red-100 text-red-900"
-                  : isSel
-                    ? "border-teal-400 bg-teal-100 text-teal-900"
-                    : "border-[var(--color-border)] bg-[var(--color-bg)]";
-              return (
-                <button
-                  key={i}
-                  type="button"
-                  disabled={revealed}
-                  onClick={() => setSelected(i)}
-                  className={`min-h-[48px] rounded-2xl border px-4 py-3 text-left text-sm font-medium transition ${tone}`}
-                >
-                  {option}
-                </button>
-              );
-            })}
-          </div>
-          {revealed && q.explanation ? (
-            <p className="mt-4 text-sm text-[var(--color-text-secondary)]">{q.explanation}</p>
-          ) : null}
-          <div className="mt-6">
-            {!revealed ? (
-              <Button className="min-h-12 w-full sm:w-auto" disabled={selected === null} onClick={goNext}>
-                Check answer
-              </Button>
-            ) : (
-              <Button className="min-h-12 w-full sm:w-auto" onClick={advance}>
-                Next question →
-              </Button>
-            )}
-          </div>
+          <p className="mt-2 text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">
+            {q.type === "multiple_choice" ? "Multiple choice" : "Short answer"}
+          </p>
+          <h2 className="mt-3 text-xl font-bold text-[var(--color-text-primary)]">{q.prompt}</h2>
+
+          {q.type === "multiple_choice" ? (
+            <>
+              <div className="mt-5 grid gap-3">
+                {q.options.map((option, optionIndex) => {
+                  const isSelected = selected === optionIndex;
+                  const showResult = revealed;
+                  const isCorrect = optionIndex === q.correct;
+                  const tone =
+                    showResult && isSelected
+                      ? isCorrect
+                        ? "border-emerald-400 bg-emerald-100 text-emerald-900"
+                        : "border-red-400 bg-red-100 text-red-900"
+                      : isSelected
+                        ? "border-teal-400 bg-teal-100 text-teal-900"
+                        : "border-[var(--color-border)] bg-[var(--color-bg)]";
+
+                  return (
+                    <button
+                      key={option}
+                      type="button"
+                      disabled={revealed}
+                      onClick={() => setSelected(optionIndex)}
+                      className={`min-h-[48px] rounded-2xl border px-4 py-3 text-left text-sm font-medium transition ${tone}`}
+                    >
+                      {option}
+                    </button>
+                  );
+                })}
+              </div>
+              {revealed && q.explanation ? (
+                <p className="mt-4 text-sm text-[var(--color-text-secondary)]">{q.explanation}</p>
+              ) : null}
+              <div className="mt-6">
+                {!revealed ? (
+                  <Button className="min-h-12 w-full sm:w-auto" disabled={!canContinue} onClick={revealAnswer}>
+                    Check answer
+                  </Button>
+                ) : (
+                  <Button className="min-h-12 w-full sm:w-auto" onClick={advance}>
+                    {index + 1 === total ? "Finish quiz" : "Next question →"}
+                  </Button>
+                )}
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="mt-5">
+                <textarea
+                  value={textResponse}
+                  onChange={(event) => setTextResponse(event.target.value)}
+                  placeholder={q.placeholder ?? "Write your response here..."}
+                  className="min-h-[180px] w-full rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-3 text-sm text-[var(--color-text-primary)] outline-none transition focus:border-teal-400"
+                />
+                <p className="mt-3 text-sm text-[var(--color-text-secondary)]">
+                  {q.guidance ?? "Use specific details from the lesson in your response."}
+                </p>
+              </div>
+              <div className="mt-6">
+                <Button className="min-h-12 w-full sm:w-auto" disabled={!canContinue} onClick={advance}>
+                  {index + 1 === total ? "Finish quiz" : "Save and continue →"}
+                </Button>
+              </div>
+            </>
+          )}
         </motion.div>
       </AnimatePresence>
     </div>
