@@ -240,22 +240,25 @@ export default function CurriculumPage() {
               </tr>
             </thead>
             <tbody>
-              {ncCurriculum.map((mod) => (
-                <tr key={mod.code} className="border-t last:border-b">
-                  <td className="px-3 py-2 font-mono text-xs text-[var(--color-primary)]">{mod.code}</td>
-                  <td className="px-3 py-2">{mod.title}</td>
-                  <td className="px-3 py-2">
-                    <a
-                      href={`/epf-curriculum/${mod.file}`}
-                      className="text-[var(--color-primary)] underline hover:text-[var(--color-text-primary)]"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      View
-                    </a>
-                  </td>
-                </tr>
-              ))}
+              {ncCurriculum.map((mod) => {
+                const slug = mod.file.replace(/\.md$/, "");
+                return (
+                  <tr key={mod.code} className="border-t last:border-b">
+                    <td className="px-3 py-2 font-mono text-xs text-[var(--color-primary)]">{mod.code}</td>
+                    <td className="px-3 py-2">{mod.title}</td>
+                    <td className="px-3 py-2">
+                      <a
+                        href={`/epf-curriculum/${slug}`}
+                        className="text-[var(--color-primary)] underline hover:text-[var(--color-text-primary)]"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        View
+                      </a>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
