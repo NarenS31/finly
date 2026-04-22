@@ -274,7 +274,7 @@ function DeerSvg() {
   );
 }
 
-const ART_MAP: Record<AnimalType, () => JSX.Element> = {
+const ART_MAP: Record<AnimalType, () => React.ReactElement> = {
   fox:     FoxSvg,
   owl:     OwlSvg,
   bear:    BearSvg,
