@@ -1,3 +1,5 @@
+// Local type for SVG props if not imported from elsewhere
+type IconSVGProps = React.SVGProps<SVGSVGElement> & { className?: string };
 export const Icon = {
   Flex: (p: IconSVGProps) => (
     <svg viewBox="0 0 20 20" fill="none" aria-hidden {...p}>
