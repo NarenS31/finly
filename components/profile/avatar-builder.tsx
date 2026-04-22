@@ -15,27 +15,27 @@ interface AvatarItem {
 const HATS: AvatarItem[] = [
   { id: "none_hat", label: "None", emoji: "—", minXp: 0, category: "hat" },
   { id: "cap", label: "Cap", emoji: "🧢", minXp: 0, category: "hat" },
-  { id: "graduation", label: "Grad Cap", emoji: "🎓", minXp: 50, category: "hat" },
-  { id: "tophat", label: "Top Hat", emoji: "🎩", minXp: 150, category: "hat" },
-  { id: "crown", label: "Crown", emoji: "👑", minXp: 500, category: "hat" },
+  { id: "graduation", label: "Grad Cap", emoji: "", minXp: 50, category: "hat" },
+  { id: "tophat", label: "Top Hat", emoji: "", minXp: 150, category: "hat" },
+  { id: "crown", label: "Crown", emoji: "", minXp: 500, category: "hat" },
   { id: "wizard", label: "Wizard", emoji: "🧙", minXp: 1000, category: "hat" },
 ];
 
 const ACCESSORIES: AvatarItem[] = [
   { id: "none_acc", label: "None", emoji: "—", minXp: 0, category: "accessory" },
-  { id: "glasses", label: "Glasses", emoji: "👓", minXp: 0, category: "accessory" },
-  { id: "sunglasses", label: "Shades", emoji: "🕶️", minXp: 100, category: "accessory" },
-  { id: "bow", label: "Bow Tie", emoji: "🎀", minXp: 200, category: "accessory" },
-  { id: "gem", label: "Gem", emoji: "💎", minXp: 700, category: "accessory" },
+  { id: "glasses", label: "Glasses", emoji: "", minXp: 0, category: "accessory" },
+  { id: "sunglasses", label: "Shades", emoji: "", minXp: 100, category: "accessory" },
+  { id: "bow", label: "Bow Tie", emoji: "", minXp: 200, category: "accessory" },
+  { id: "gem", label: "Gem", emoji: "", minXp: 700, category: "accessory" },
 ];
 
 const BADGES: AvatarItem[] = [
   { id: "none_badge", label: "None", emoji: "—", minXp: 0, category: "badge" },
   { id: "star", label: "Star", emoji: "⭐", minXp: 0, category: "badge" },
-  { id: "fire", label: "Fire", emoji: "🔥", minXp: 75, category: "badge" },
-  { id: "rocket", label: "Rocket", emoji: "🚀", minXp: 300, category: "badge" },
-  { id: "trophy", label: "Trophy", emoji: "🏆", minXp: 700, category: "badge" },
-  { id: "money_wings", label: "Money", emoji: "💸", minXp: 200, category: "badge" },
+  { id: "fire", label: "Fire", emoji: "", minXp: 75, category: "badge" },
+  { id: "rocket", label: "Rocket", emoji: "", minXp: 300, category: "badge" },
+  { id: "trophy", label: "Trophy", emoji: "", minXp: 700, category: "badge" },
+  { id: "money_wings", label: "Money", emoji: "", minXp: 200, category: "badge" },
 ];
 
 interface AvatarConfig {
@@ -100,7 +100,7 @@ export function AvatarBuilder({ userXp, initialAvatar = {}, onSave }: AvatarBuil
               {locked ? `${item.minXp} XP` : item.label}
             </span>
             {locked && (
-              <span className="absolute -right-1 -top-1 text-[10px]">🔒</span>
+              <span className="absolute -right-1 -top-1 text-[10px]"></span>
             )}
           </button>
         );
@@ -155,8 +155,46 @@ export function AvatarBuilder({ userXp, initialAvatar = {}, onSave }: AvatarBuil
         disabled={saving}
         className="mt-5 w-full rounded-xl bg-[var(--green)] py-3 text-sm font-bold text-white hover:bg-[var(--green-dark)] disabled:opacity-50"
       >
-        {saved ? "Saved! ✓" : saving ? "Saving…" : "Save Avatar"}
+        {saved ? "Saved!" : saving ? "Saving…" : "Save Avatar"}
       </button>
     </div>
   );
 }
+// export function AvatarBuilder({ userXp, initialAvatar = {}, onSave }: AvatarBuilderProps) {
+//   const [selected, setSelected] = useState<AvatarConfig>({
+//     hat: initialAvatar.hat ?? "cap",
+//     accessory: initialAvatar.accessory ?? "none_acc",
+//     badge: initialAvatar.badge ?? "star",
+//   });
+//   const [saving, setSaving] = useState(false);
+//   const [saved, setSaved] = useState(false);
+//
+//   const hatItem = HATS.find((h) => h.id === selected.hat);
+//   const accItem = ACCESSORIES.find((a) => a.id === selected.accessory);
+//   const badgeItem = BADGES.find((b) => b.id === selected.badge);
+//
+//   const save = async () => {
+//     setSaving(true);
+//     await fetch("/api/avatar", {
+//       method: "POST",
+//       headers: { "Content-Type": "application/json" },
+//       body: JSON.stringify(selected),
+//     });
+//     setSaving(false);
+//     setSaved(true);
+//     onSave?.(selected);
+//     setTimeout(() => setSaved(false), 2000);
+//   };
+//
+//   const renderItems = (items: AvatarItem[], key: keyof AvatarConfig) => (
+//     <div className="flex flex-wrap gap-2">
+//       {/* ...rest of renderItems... */}
+//     </div>
+//   );
+//
+//   return (
+//     <div>
+//       {/* ...Avatar builder UI... */}
+//     </div>
+//   );
+// }
