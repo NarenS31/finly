@@ -34,8 +34,6 @@ export function LessonViewer({
   keyTakeaways,
   xpReward,
   quizCount: quizCountProp,
-  backHref = "/learn",
-  backLabel = "Back to lessons",
   children,
 }: {
   slug: string;
@@ -51,8 +49,6 @@ export function LessonViewer({
   keyTakeaways: string[];
   xpReward: number;
   quizCount: number | undefined;
-  backHref?: string;
-  backLabel?: string;
   children: React.ReactNode;
 }) {
   const effectiveQuizCount = typeof quizCountProp === "number" ? quizCountProp : 0;
@@ -254,11 +250,11 @@ export function LessonViewer({
       <div className="mb-4 border-b border-[var(--border)] bg-[var(--white)] px-4 py-3 sm:px-6">
         <div className="mx-auto flex max-w-[1200px] flex-wrap items-center justify-between gap-3">
           <Link
-            href={backHref}
+            href="/learn"
             className="inline-flex min-h-11 items-center gap-2 text-[13px] font-semibold text-[var(--gray-500)] hover:text-[var(--black)]"
           >
             <Icon.ChevronRight className="h-4 w-4 rotate-180" aria-hidden />
-            {backLabel}
+            Back to lessons
           </Link>
           <p className="hidden max-w-[40%] truncate text-center text-sm font-semibold text-[var(--black)] sm:block">
             {title}{" "}
@@ -391,7 +387,10 @@ export function LessonViewer({
         takeaways={keyTakeaways}
         xp={xpEarned}
         nextLesson={nextLesson}
-        onClose={() => setCelebrateOpen(false)}
+        onClose={() => {
+          setCelebrateOpen(false);
+          window.location.reload();
+        }}
       />
     </div>
   );
