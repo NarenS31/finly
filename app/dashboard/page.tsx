@@ -18,7 +18,7 @@ import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { AvatarBuilder } from "@/components/profile/avatar-builder";
+// import { AvatarBuilder } from "@/components/profile/avatar-builder";
 import { ShareStatsCard } from "@/components/profile/share-stats-card";
 import { MoneyGoalsTracker } from "@/components/profile/money-goals-tracker";
 import { LessonHistory } from "@/components/profile/lesson-history";

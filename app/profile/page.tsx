@@ -12,7 +12,7 @@ import { Avatar } from "@/components/ui/avatar";
 import { StreakPill } from "@/components/profile/streak-pill";
 import { StreakShieldWidget } from "@/components/profile/streak-shield-widget";
 import { MoneyGoalsTracker } from "@/components/profile/money-goals-tracker";
-import { AvatarBuilder } from "@/components/profile/avatar-builder";
+// import { AvatarBuilder } from "@/components/profile/avatar-builder";
 import { ShareStatsCard } from "@/components/profile/share-stats-card";
 
 function embeddedLessonTopic(lessons: unknown): string | undefined {
@@ -171,7 +171,7 @@ export default async function ProfilePage() {
       </div>
 
       {/* Avatar Builder */}
-      <AvatarBuilder userXp={xp} initialAvatar={(profile?.avatar as Record<string, string | null>) ?? {}} />
+      {/* <AvatarBuilder userXp={xp} initialAvatar={(profile?.avatar as Record<string, string | null>) ?? {}} /> */}
 
       <ShareStatsCard displayName={displayName} xp={xp} streak={streak} level={levelLabel} />
 
