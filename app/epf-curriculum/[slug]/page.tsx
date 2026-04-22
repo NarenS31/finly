@@ -107,6 +107,8 @@ export default async function LessonPage({ params }: { params: { slug: string } 
         >
           {content}
         </LessonViewer>
+      </div>
+    );
   } catch (err) {
     // Debug log for 404 errors
     // eslint-disable-next-line no-console
