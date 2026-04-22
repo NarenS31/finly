@@ -1,3 +1,4 @@
+import * as React from "react";
 import type { AnimalType } from "@/lib/cards";
 
 function FoxSvg() {
