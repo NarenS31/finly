@@ -24,7 +24,7 @@ import {
 import { epfCurriculumFiles } from "@/content/epf-curriculum/index";
 import matter from "gray-matter";
 
-  // Optionally, you can use dynamic import for metadata as well, or just return a generic title
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   return { title: params.slug };
 }
 
