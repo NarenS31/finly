@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState, useEffect } from "react";
+import { useCallback } from "react";
 import Link from "next/link";
 import { Icon } from "@/components/ui/icons";
 import { Badge } from "@/components/ui/badge";
@@ -42,6 +43,25 @@ export function LessonLibraryClient({
   const [difficulty, setDifficulty] = useState("all");
   const ageTier = useAgeTierStore((s) => s.ageTier);
   const guestProgress = useProgressStore((s) => s.guestProgress);
+  const updateProgress = useProgressStore((s) => s.updateProgress);
+
+  // Fetch real progress for logged-in users
+  useEffect(() => {
+    if (!isLoggedIn) return;
+    (async () => {
+      const res = await fetch("/api/progress", { method: "GET" });
+      if (res.ok) {
+        const { progress } = await res.json();
+        if (progress && typeof progress === "object") {
+          Object.entries(progress).forEach(([slug, entry]) => {
+            updateProgress(slug, entry);
+          });
+        }
+      }
+    })();
+    // Only run on mount or login state change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoggedIn]);
   const showToast = useToastStore((s) => s.show);
 
   useEffect(() => {
@@ -62,11 +82,28 @@ export function LessonLibraryClient({
     });
   }, [lessons, ageTier, topic, difficulty, query]);
 
-  const continueLessons = useMemo(
+  // Classify lessons
+  const completedLessons = useMemo(
+    () =>
+      lessons.filter(
+        (lesson) =>
+          lessonMatchesTier(lesson, ageTier) && guestProgress[lesson.slug]?.status === "completed"
+      ),
+    [lessons, guestProgress, ageTier]
+  );
+  const inProgressLessons = useMemo(
     () =>
       lessons.filter(
         (lesson) =>
           lessonMatchesTier(lesson, ageTier) && guestProgress[lesson.slug]?.status === "in_progress"
+      ),
+    [lessons, guestProgress, ageTier]
+  );
+  const notStartedLessons = useMemo(
+    () =>
+      lessons.filter(
+        (lesson) =>
+          lessonMatchesTier(lesson, ageTier) && (!guestProgress[lesson.slug] || guestProgress[lesson.slug]?.status === "not_started")
       ),
     [lessons, guestProgress, ageTier]
   );
@@ -156,28 +193,54 @@ export function LessonLibraryClient({
         </div>
       </div>
 
-      {continueLessons.length > 0 && (
-        <section className="space-y-4">
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <div className="flex items-center gap-2">
-              <Icon.BookOpen className="h-5 w-5 text-[var(--green)]" />
-              <h2 className="text-2xl font-bold text-[var(--color-text-primary)]">Continue where you left off</h2>
-            </div>
-            {!isLoggedIn && completedGuestCount > 0 && (
-              <Button asChild variant="secondary" size="sm">
-                <Link href="/auth/signup">Save your progress → Sign in</Link>
-              </Button>
+
+      {/* Progress summary section */}
+      <section className="space-y-6">
+        <div className="flex flex-wrap gap-4">
+          <div className="flex-1 min-w-[220px]">
+            <h2 className="text-lg font-bold mb-2 text-[var(--color-success)]">Completed</h2>
+            {completedLessons.length === 0 ? (
+              <p className="text-sm text-[var(--color-text-secondary)]">No lessons completed yet.</p>
+            ) : (
+              <div className="flex gap-2 flex-wrap">
+                {completedLessons.map((lesson) => (
+                  <div key={lesson.slug} className="min-w-[180px] shrink-0">
+                    <LessonCard lesson={lesson} />
+                  </div>
+                ))}
+              </div>
             )}
           </div>
-          <div className="flex gap-4 overflow-x-auto pb-2">
-            {continueLessons.map((lesson) => (
-              <div key={lesson.slug} className="min-w-[280px] shrink-0">
-                <LessonCard lesson={lesson} />
+          <div className="flex-1 min-w-[220px]">
+            <h2 className="text-lg font-bold mb-2 text-[var(--color-warning)]">In Progress</h2>
+            {inProgressLessons.length === 0 ? (
+              <p className="text-sm text-[var(--color-text-secondary)]">No lessons in progress.</p>
+            ) : (
+              <div className="flex gap-2 flex-wrap">
+                {inProgressLessons.map((lesson) => (
+                  <div key={lesson.slug} className="min-w-[180px] shrink-0">
+                    <LessonCard lesson={lesson} />
+                  </div>
+                ))}
               </div>
-            ))}
+            )}
           </div>
-        </section>
-      )}
+          <div className="flex-1 min-w-[220px]">
+            <h2 className="text-lg font-bold mb-2 text-[var(--color-text-secondary)]">Not Started</h2>
+            {notStartedLessons.length === 0 ? (
+              <p className="text-sm text-[var(--color-text-secondary)]">All lessons started!</p>
+            ) : (
+              <div className="flex gap-2 flex-wrap">
+                {notStartedLessons.map((lesson) => (
+                  <div key={lesson.slug} className="min-w-[180px] shrink-0">
+                    <LessonCard lesson={lesson} />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
 
       <section>
         <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
