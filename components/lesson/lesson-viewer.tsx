@@ -83,12 +83,15 @@ export function LessonViewer({
   const quizPercent =
     effectiveQuizCount > 0 ? Math.round((correctCount / effectiveQuizCount) * 100) : undefined;
 
+  // Track real awarded XP from backend
+  const [awardedXp, setAwardedXp] = useState<number | null>(null);
   const xpEarned = useMemo(() => {
+    if (awardedXp !== null) return awardedXp;
     let xp = xpReward;
     xp += correctCount;
     if (effectiveQuizCount > 0 && correctCount === effectiveQuizCount) xp += 5;
     return xp;
-  }, [xpReward, correctCount, effectiveQuizCount]);
+  }, [xpReward, correctCount, effectiveQuizCount, awardedXp]);
 
   useEffect(() => {
     const onScroll = () => {
@@ -171,10 +174,11 @@ export function LessonViewer({
             }
             const xp = json.xpResult;
             if (xp?.xp_awarded != null && xp.xp_awarded > 0) {
+              setAwardedXp(xp.xp_awarded);
               toast(`+${xp.xp_awarded} XP earned`);
               if (xp.leveled_up) {
                 setTimeout(() => {
-                  toast(`You leveled up to ${xp.new_level}!`);
+                  toast(`You leveled up to ${xp.new_level}!");
                 }, 2000);
               }
             }
