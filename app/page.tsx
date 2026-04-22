@@ -47,11 +47,7 @@ export default async function HomePage() {
                 </Button>
             </div>
             <p className="mt-8 text-sm text-[var(--color-text-secondary)]">
-              Free · No account required ·{" "}
-              <span className="font-medium text-[var(--color-text-primary)]">
-                {stats.totalCountries}+
-              </span>{" "}
-              countries
+              Free · No account required
             </p>
           </div>
           <FloatingHero />
