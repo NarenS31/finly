@@ -32,25 +32,30 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 export default async function LessonPage({ params }: { params: { slug: string } }) {
   const { slug } = params;
   try {
-    const mod = epfCurriculumFiles[slug];
+    const mod = epfCurriculumFiles[slug as keyof typeof epfCurriculumFiles];
     if (!mod) throw new Error("Lesson not found");
     const mdModule = await mod();
     const source = mdModule.default ?? mdModule;
-    // If using next-mdx-remote, source will be a string
-    const { data, content: rawContent } = matter(source);
-    const headings = extractHeadings(rawContent);
+    let data = {};
+    let rawContent = "";
+    if (typeof source === "string") {
+      const parsed = matter(source);
+      data = parsed.data;
+      rawContent = parsed.content;
+    }
+    const headings = rawContent ? extractHeadings(rawContent) : [];
     // Fallbacks for meta fields
     const meta = {
       slug,
-      title: data.title || slug,
-      description: data.description || "",
-      topic: data.topic || "money_basics",
-      ageTier: data.ageTier || "13-17",
-      difficulty: data.difficulty || "beginner",
-      estimatedMinutes: data.estimatedMinutes || 5,
-      keyTakeaways: data.keyTakeaways || [],
-      xpReward: data.xpReward || 10,
-      quizCount: data.quizCount || 0,
+      title: (data as any)?.title ?? slug,
+      description: (data as any)?.description ?? "",
+      topic: (data as any)?.topic ?? "money_basics",
+      ageTier: (data as any)?.ageTier ?? "13-17",
+      difficulty: (data as any)?.difficulty ?? "beginner",
+      estimatedMinutes: (data as any)?.estimatedMinutes ?? 5,
+      keyTakeaways: (data as any)?.keyTakeaways ?? [],
+      xpReward: (data as any)?.xpReward ?? 10,
+      quizCount: (data as any)?.quizCount ?? 0,
     };
     const topicLabel = topicMeta[meta.topic]?.label ?? meta.topic;
     const supabase = await createClient();
@@ -61,6 +66,9 @@ export default async function LessonPage({ params }: { params: { slug: string } 
       .eq("published", true)
       .maybeSingle();
 
+    if (!rawContent) {
+      throw new Error("Lesson content is not available or MDX could not be loaded as string.");
+    }
     const { content } = await compileMDX({
       source: rawContent,
       options: { parseFrontmatter: false },
@@ -101,7 +109,10 @@ export default async function LessonPage({ params }: { params: { slug: string } 
         </LessonViewer>
       </div>
     );
-  } catch {
+  } catch (err) {
+    // Debug log for 404 errors
+    // eslint-disable-next-line no-console
+    console.error("[epf-curriculum] 404 for slug:", slug, err);
     notFound();
   }
 }
