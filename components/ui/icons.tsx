@@ -39,4 +39,3 @@ export const Icon = {
   ),
 
   // File intentionally left empty to resolve build errors.
-    <svg viewBox="0 0 20 20" fill="none" aria-hidden {...p}>
