@@ -54,7 +54,15 @@ export function LessonLibraryClient({
         const { progress } = await res.json();
         if (progress && typeof progress === "object") {
           Object.entries(progress).forEach(([slug, entry]) => {
-            updateProgress(slug, entry);
+            // Validate entry shape before updating progress
+            if (
+              entry && typeof entry === "object" &&
+              typeof entry.status === "string" &&
+              typeof entry.scrollProgress === "number" &&
+              typeof entry.answeredQuestions === "object"
+            ) {
+              updateProgress(slug, entry as import("@/types").GuestLessonProgress);
+            }
           });
         }
       }
