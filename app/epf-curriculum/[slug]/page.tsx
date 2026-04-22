@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
+import fs from "node:fs";
+import path from "node:path";
 import type { ComponentProps } from "react";
-import Link from "next/link";
 import { compileMDX } from "next-mdx-remote/rsc";
 import { notFound } from "next/navigation";
 import { LessonViewer } from "@/components/lesson/lesson-viewer";
@@ -19,31 +20,34 @@ import {
   h2,
   h3,
 } from "@/components/lesson/mdx-components";
-
-
-import { epfCurriculumFiles } from "@/content/epf-curriculum/index";
 import matter from "gray-matter";
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  return { title: params.slug };
+const epfCurriculumDir = path.join(process.cwd(), "content", "epf-curriculum");
+
+function getEpfCurriculumSource(slug: string) {
+  const filePath = path.join(epfCurriculumDir, `${slug}.mdx`);
+  if (!fs.existsSync(filePath)) {
+    throw new Error(`Lesson not found for slug: ${slug}`);
+  }
+
+  return fs.readFileSync(filePath, "utf8");
 }
 
+function isMissingLessonError(error: unknown, slug: string) {
+  return error instanceof Error && error.message === `Lesson not found for slug: ${slug}`;
+}
 
-export default async function LessonPage({ params }: { params: { slug: string } }) {
-  const { slug } = params;
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  return { title: `${slug} | Finly` };
+}
+
+export default async function LessonPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   try {
-    const mod = epfCurriculumFiles[slug as keyof typeof epfCurriculumFiles];
-    if (!mod) throw new Error("Lesson not found");
-    const mdModule = await mod();
-    const source = mdModule.default ?? mdModule;
-    let data = {};
-    let rawContent = "";
-    if (typeof source === "string") {
-      const parsed = matter(source);
-      data = parsed.data;
-      rawContent = parsed.content;
-    }
-    const headings = rawContent ? extractHeadings(rawContent) : [];
+    const source = getEpfCurriculumSource(slug);
+    const { data, content: rawContent } = matter(source);
+    const headings = extractHeadings(rawContent);
     // Fallbacks for meta fields
     const meta = {
       slug,
@@ -66,9 +70,6 @@ export default async function LessonPage({ params }: { params: { slug: string } 
       .eq("published", true)
       .maybeSingle();
 
-    if (!rawContent) {
-      throw new Error("Lesson content is not available or MDX could not be loaded as string.");
-    }
     const { content } = await compileMDX({
       source: rawContent,
       options: { parseFrontmatter: false },
@@ -110,9 +111,9 @@ export default async function LessonPage({ params }: { params: { slug: string } 
       </div>
     );
   } catch (err) {
-    // Debug log for 404 errors
-    // eslint-disable-next-line no-console
-    console.error("[epf-curriculum] 404 for slug:", slug, err);
-    notFound();
+    if (isMissingLessonError(err, slug)) {
+      notFound();
+    }
+    throw err;
   }
 }
