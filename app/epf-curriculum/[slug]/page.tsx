@@ -19,8 +19,8 @@ import {
   h2,
   h3,
 } from "@/components/lesson/mdx-components";
-import fs from "node:fs";
-import path from "node:path";
+
+import { epfCurriculumFiles } from "@/content/epf-curriculum/index";
 import matter from "gray-matter";
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
@@ -38,11 +38,13 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
 }
 
-export default async function LessonPage({ params }: { params: { slug: string } }) {
   const { slug } = params;
-  const filePath = path.join(process.cwd(), "content/epf-curriculum", `${slug}.md`);
   try {
-    const source = fs.readFileSync(filePath, "utf8");
+    const mod = epfCurriculumFiles[slug];
+    if (!mod) throw new Error("Lesson not found");
+    const mdModule = await mod();
+    const source = mdModule.default ?? mdModule;
+    // If using next-mdx-remote, source will be a string
     const { data, content: rawContent } = matter(source);
     const headings = extractHeadings(rawContent);
     // Fallbacks for meta fields
@@ -85,8 +87,6 @@ export default async function LessonPage({ params }: { params: { slug: string } 
         h3,
       },
     });
-
-    // Related lessons logic can be added if needed
 
     return (
       <div className="mx-auto max-w-[1200px] px-4 pb-16 pt-4 sm:px-6 lg:px-8">
