@@ -171,7 +171,7 @@ export default async function HomePage() {
               minute.
             </p>
           </div>
-          <Button asChild variant="secondary" className="shrink-0">
+          <Button asChild variant="secondary" className="shrink-0 !text-white">
             <a href="/learn" className="!text-white">Browse lessons</a>
           </Button>
         </div>

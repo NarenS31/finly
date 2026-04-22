@@ -15,7 +15,7 @@ export function AgeTierToggle() {
           onClick={() => setAgeTier(tier)}
           className={`rounded-[8px] px-2.5 py-1.5 text-xs font-bold transition ${
             ageTier === tier
-              ? "bg-[var(--black)] text-[var(--white)]"
+              ? "bg-[var(--black)] text-white"
               : "bg-transparent text-[var(--gray-500)] hover:text-[var(--black)]"
           }`}
         >

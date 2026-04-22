@@ -120,7 +120,7 @@ function JoinFormContent() {
             <span style={{ fontSize: '13px', color: 'var(--gray-400)', marginRight: 8 }}>
               Don't have a code?
             </span>
-            <Button asChild className="bg-black text-white font-bold px-4 py-2 rounded-lg inline-block" style={{ fontSize: 13, height: 'auto', minHeight: 0, lineHeight: 1.2 }}>
+            <Button asChild className="bg-black text-white font-bold px-4 py-2 rounded-lg inline-block hover:bg-neutral-900" style={{ fontSize: 13, height: 'auto', minHeight: 0, lineHeight: 1.2 }}>
               <a href="/learn" className="!text-white">Browse lessons anyway →</a>
             </Button>
           </div>
