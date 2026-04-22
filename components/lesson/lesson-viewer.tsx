@@ -178,7 +178,7 @@ export function LessonViewer({
               toast(`+${xp.xp_awarded} XP earned`);
               if (xp.leveled_up) {
                 setTimeout(() => {
-                  toast(`You leveled up to ${xp.new_level}!");
+                  toast(`You leveled up to ${xp.new_level}!`);
                 }, 2000);
               }
             }
