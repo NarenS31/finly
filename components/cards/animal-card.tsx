@@ -6,30 +6,8 @@ import { AnimalArt } from "./animal-art";
 
 /* ── Element icon ── */
 function ElementIcon({ element, size = 18 }: { element: string; size?: number }) {
-  const cfg = ELEMENT_CONFIG[element as keyof typeof ELEMENT_CONFIG];
-      </svg>
-    ),
-      </svg>
-    ),
-      </svg>
-    ),
-      </svg>
-    ),
-      </svg>
-    ),
-      </svg>
-    ),
-      </svg>
-    ),
-  return (
-    <span
-      className="inline-flex items-center justify-center rounded-full"
-      style={{ width: size, height: size, background: cfg.iconBg, flexShrink: 0 }}
-    >
-    // ElementIcon temporarily disabled to resolve build errors.
-    return null;
-    </span>
-  );
+  // ElementIcon temporarily disabled to resolve build errors.
+  return null;
 }
 
 /* ── Energy cost dots ── */
