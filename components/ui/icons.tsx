@@ -1,3 +1,9 @@
+  Goals: (p: IconSVGProps) => (
+    <svg viewBox="0 0 20 20" fill="none" aria-hidden {...p}>
+      <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.5" fill="#f3f4f6" />
+      <path d="M10 5v5l3 3" stroke="#6b7280" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  ),
 // Local type for SVG props if not imported from elsewhere
 type IconSVGProps = React.SVGProps<SVGSVGElement> & { className?: string };
 export const Icon = {
