@@ -6,7 +6,10 @@
 //   ...other imports...
 // }
 
-// export function CardCollection() {
+export function CardCollection() {
+	// TODO: Restore full implementation
+	return <div>Card Collection feature is under construction.</div>;
+}
 //   const [filterRarity, setFilterRarity] = useState<CardRarity | "all">("all");
 //   const [filterAnimal, setFilterAnimal] = useState<AnimalType | "all">("all");
 //
