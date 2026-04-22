@@ -25,8 +25,8 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-40 px-3 pt-3 sm:px-5 lg:px-8">
       <nav className="mx-auto flex w-full max-w-[1200px] items-center justify-between rounded-2xl border border-[#e8dfcf] bg-[rgba(255,252,246,0.92)] px-4 py-3 shadow-[0_4px_16px_rgba(31,41,55,0.07)] backdrop-blur-xl">
-        <Link href="/" className="flex items-center gap-3 text-xl font-extrabold tracking-tight text-[var(--color-text-primary)]">
-          <FinlyLogo size="md" />
+        <Link href="/" className="flex items-center gap-4 text-2xl font-extrabold tracking-tight text-[var(--color-text-primary)]">
+          <FinlyLogo size="lg" />
         </Link>
 
         <div className="hidden items-center gap-2 rounded-full bg-white/70 p-1 lg:flex">
