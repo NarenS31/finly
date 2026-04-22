@@ -1,4 +1,4 @@
-import { CardCollection } from "@/components/cards/card-collection";
+// import { CardCollection } from "@/components/cards/card-collection";
 
 export default function CardsPage() {
   return (
@@ -42,7 +42,7 @@ export default function CardsPage() {
         </div>
       </section>
 
-      <CardCollection />
+      {/* <CardCollection /> */}
     </div>
   );
 }
