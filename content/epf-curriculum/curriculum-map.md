@@ -43,3 +43,41 @@
 | CC.2.1 | Consumer Protection Laws | EPF.CC.2.1 | - | [CC.2.1.md](./CC.2.1.md) |
 | CC.2.2 | Fraudulent Practices | EPF.CC.2.2 | - | [CC.2.2.md](./CC.2.2.md) |
 | CC.2.3 | Consumer Self-Protection | EPF.CC.2.3 | - | [CC.2.3.md](./CC.2.3.md) |
+
+---
+
+## Full NC EPF Curriculum by Topic
+
+### Budgeting
+- Needs vs wants (Foundation)
+- Saving before spending (Foundation)
+- Simple weekly plan (Foundation)
+- 50/30/20 basics (Real World)
+- Adjusting a plan after income changes (Real World)
+- Avoiding overspending traps (Real World)
+
+### Saving
+- Goal jars (Foundation)
+- Short-term saving (Foundation)
+- Why waiting can help (Foundation)
+- Emergency funds (Real World)
+- Savings rate (Real World)
+- Timeline planning (Real World)
+
+### Investing
+- Growth basics (Foundation)
+- What ownership means (Foundation)
+- Compound interest (Real World)
+- Risk and diversification (Real World)
+- Long-term mindset (Real World)
+
+### Banking
+- Keeping money safe (Foundation)
+- Deposits and withdrawals (Foundation)
+- Savings accounts (Real World)
+- Interest spread (Real World)
+- Fee comparison (Real World)
+
+---
+
+This map covers all lesson topics and tiers for the North Carolina Economics & Personal Finance standards, as implemented in this curriculum.
