@@ -87,12 +87,12 @@ export function SignupForm() {
     if (!data.session) {
       setSubmitting(false);
       setNotice("Account created. Check your email to confirm your account, then log in.");
-      router.push(`/auth/login?email=${encodeURIComponent(email)}&checkEmail=1`);
+      await router.push(`/auth/login?email=${encodeURIComponent(email)}&checkEmail=1`);
       return;
     }
 
-    router.push("/onboarding");
-    router.refresh();
+    setSubmitting(false);
+    await router.push("/onboarding");
   }
 
   return (

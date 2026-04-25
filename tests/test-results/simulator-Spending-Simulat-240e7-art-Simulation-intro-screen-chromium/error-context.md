@@ -7,7 +7,7 @@
 # Test info
 
 - Name: simulator.spec.ts >> Spending Simulator — public access >> simulator shows Start Simulation intro screen
-- Location: tests/e2e/simulator.spec.ts:19:7
+- Location: tests/e2e/simulator.spec.ts:24:18
 
 # Error details
 
@@ -119,15 +119,15 @@ Call log:
   18  | 
   19  |   test("simulator shows Start Simulation intro screen", async ({ page }) => {
   20  |     await page.goto("/simulator");
-> 21  |     await expect(page.getByText(/spending simulator/i)).toBeVisible({ timeout: 8_000 });
-      |                                                         ^ Error: expect(locator).toBeVisible() failed
+  21  |     await expect(page.getByText(/spending simulator/i)).toBeVisible({ timeout: 8_000 });
   22  |     await expect(page.getByRole("button", { name: /start simulation/i })).toBeVisible();
   23  |   });
   24  | 
   25  |   test("clicking Start Simulation reveals Day 1 choices", async ({ page }) => {
   26  |     await page.goto("/simulator");
   27  |     await page.getByRole("button", { name: /start simulation/i }).click();
-  28  | 
+> 28  | 
+      |                                                                    ^ Error: expect(locator).toBeVisible() failed
   29  |     // Day 1 event should be visible
   30  |     await expect(page.getByText(/day 1/i)).toBeVisible({ timeout: 5_000 });
   31  | 

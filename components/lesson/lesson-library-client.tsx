@@ -1,7 +1,6 @@
 "use client";
 
-import { useMemo, useState, useEffect } from "react";
-import { useCallback } from "react";
+import { useMemo, useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { Icon } from "@/components/ui/icons";
 import { Badge } from "@/components/ui/badge";
@@ -41,6 +40,8 @@ export function LessonLibraryClient({
   const [query, setQuery] = useState("");
   const [topic, setTopic] = useState(initialTopic);
   const [difficulty, setDifficulty] = useState("all");
+  // Tab state for progress categories
+  const [activeTab, setActiveTab] = useState<'completed' | 'in_progress' | 'not_started'>('in_progress');
   const ageTier = useAgeTierStore((s) => s.ageTier);
   const guestProgress = useProgressStore((s) => s.guestProgress);
   const updateProgress = useProgressStore((s) => s.updateProgress);
@@ -203,12 +204,46 @@ export function LessonLibraryClient({
       </div>
 
 
-      {/* Progress summary section */}
-      <section className="space-y-6">
-        <div className="flex flex-wrap gap-4">
-          <div className="flex-1 min-w-[220px]">
-            <h2 className="text-lg font-bold mb-2 text-[var(--color-success)]">Completed</h2>
-            {completedLessons.length === 0 ? (
+      {/* Progress summary tabs */}
+      <section className="mb-8">
+        <div className="flex gap-2 mb-4">
+          <button
+            type="button"
+            onClick={() => setActiveTab('completed')}
+            className={`px-4 py-2 rounded-t-lg font-semibold border-b-2 transition-colors duration-200 focus:outline-none ${
+              activeTab === 'completed'
+                ? 'border-[var(--color-success)] text-[var(--color-success)] bg-white'
+                : 'border-transparent text-[var(--color-text-secondary)] bg-[var(--color-bg)] opacity-70'
+            }`}
+          >
+            Completed
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab('in_progress')}
+            className={`px-4 py-2 rounded-t-lg font-semibold border-b-2 transition-colors duration-200 focus:outline-none ${
+              activeTab === 'in_progress'
+                ? 'border-[var(--color-warning)] text-[var(--color-warning)] bg-white'
+                : 'border-transparent text-[var(--color-text-secondary)] bg-[var(--color-bg)] opacity-70'
+            }`}
+          >
+            In Progress
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab('not_started')}
+            className={`px-4 py-2 rounded-t-lg font-semibold border-b-2 transition-colors duration-200 focus:outline-none ${
+              activeTab === 'not_started'
+                ? 'border-[var(--color-text-secondary)] text-[var(--color-text-secondary)] bg-white'
+                : 'border-transparent text-[var(--color-text-secondary)] bg-[var(--color-bg)] opacity-70'
+            }`}
+          >
+            Not Started
+          </button>
+        </div>
+        <div className="rounded-b-lg border border-t-0 bg-white p-4 shadow-[var(--shadow-sm)]">
+          {activeTab === 'completed' && (
+            completedLessons.length === 0 ? (
               <p className="text-sm text-[var(--color-text-secondary)]">No lessons completed yet.</p>
             ) : (
               <div className="flex gap-2 flex-wrap">
@@ -218,11 +253,10 @@ export function LessonLibraryClient({
                   </div>
                 ))}
               </div>
-            )}
-          </div>
-          <div className="flex-1 min-w-[220px]">
-            <h2 className="text-lg font-bold mb-2 text-[var(--color-warning)]">In Progress</h2>
-            {inProgressLessons.length === 0 ? (
+            )
+          )}
+          {activeTab === 'in_progress' && (
+            inProgressLessons.length === 0 ? (
               <p className="text-sm text-[var(--color-text-secondary)]">No lessons in progress.</p>
             ) : (
               <div className="flex gap-2 flex-wrap">
@@ -232,11 +266,10 @@ export function LessonLibraryClient({
                   </div>
                 ))}
               </div>
-            )}
-          </div>
-          <div className="flex-1 min-w-[220px]">
-            <h2 className="text-lg font-bold mb-2 text-[var(--color-text-secondary)]">Not Started</h2>
-            {notStartedLessons.length === 0 ? (
+            )
+          )}
+          {activeTab === 'not_started' && (
+            notStartedLessons.length === 0 ? (
               <p className="text-sm text-[var(--color-text-secondary)]">All lessons started!</p>
             ) : (
               <div className="flex gap-2 flex-wrap">
@@ -246,8 +279,8 @@ export function LessonLibraryClient({
                   </div>
                 ))}
               </div>
-            )}
-          </div>
+            )
+          )}
         </div>
       </section>
 

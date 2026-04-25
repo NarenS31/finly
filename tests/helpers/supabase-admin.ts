@@ -85,6 +85,13 @@ export async function deleteTestUser(id: string): Promise<void> {
 }
 
 export async function setUserXp(userId: string, xp: number): Promise<void> {
+  const level =
+    xp >= 1500 ? "Money Master" :
+    xp >= 700  ? "Finance Pro" :
+    xp >= 300  ? "Investor" :
+    xp >= 100  ? "Saver" :
+                 "Beginner";
+
   await fetch(`${SUPABASE_URL}/rest/v1/profiles?id=eq.${userId}`, {
     method: "PATCH",
     headers: {
@@ -93,7 +100,7 @@ export async function setUserXp(userId: string, xp: number): Promise<void> {
       Authorization: `Bearer ${SERVICE_ROLE_KEY}`,
       Prefer: "return=minimal",
     },
-    body: JSON.stringify({ xp }),
+    body: JSON.stringify({ xp, level }),
   });
 }
 
@@ -277,4 +284,93 @@ export async function deletePollVote(userId: string, pollId: string): Promise<vo
       headers: { apikey: SERVICE_ROLE_KEY, Authorization: `Bearer ${SERVICE_ROLE_KEY}` },
     }
   );
+}
+
+// ---------------------------------------------------------------------------
+// Streak helpers
+// ---------------------------------------------------------------------------
+
+export async function setUserStreak(
+  userId: string,
+  options: {
+    streak_current?: number;
+    streak_longest?: number;
+    streak_shields?: number;
+    last_active_date?: string | null;
+  }
+): Promise<void> {
+  await fetch(`${SUPABASE_URL}/rest/v1/profiles?id=eq.${userId}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      apikey: SERVICE_ROLE_KEY,
+      Authorization: `Bearer ${SERVICE_ROLE_KEY}`,
+      Prefer: "return=minimal",
+    },
+    body: JSON.stringify(options),
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Lesson helpers
+// ---------------------------------------------------------------------------
+
+export async function getLessonIdBySlug(slug: string): Promise<string | null> {
+  const res = await fetch(
+    `${SUPABASE_URL}/rest/v1/lessons?slug=eq.${encodeURIComponent(slug)}&select=id`,
+    {
+      headers: { apikey: SERVICE_ROLE_KEY, Authorization: `Bearer ${SERVICE_ROLE_KEY}` },
+    }
+  );
+  const rows = (await res.json()) as Array<{ id: string }>;
+  return rows[0]?.id ?? null;
+}
+
+export async function getLessonProgress(
+  userId: string,
+  lessonId: string
+): Promise<Record<string, unknown> | null> {
+  const res = await fetch(
+    `${SUPABASE_URL}/rest/v1/lesson_progress?user_id=eq.${userId}&lesson_id=eq.${lessonId}&select=*`,
+    {
+      headers: { apikey: SERVICE_ROLE_KEY, Authorization: `Bearer ${SERVICE_ROLE_KEY}` },
+    }
+  );
+  const rows = (await res.json()) as Array<Record<string, unknown>>;
+  return rows[0] ?? null;
+}
+
+export async function clearLessonProgress(userId: string, lessonId: string): Promise<void> {
+  await fetch(
+    `${SUPABASE_URL}/rest/v1/lesson_progress?user_id=eq.${userId}&lesson_id=eq.${lessonId}`,
+    {
+      method: "DELETE",
+      headers: { apikey: SERVICE_ROLE_KEY, Authorization: `Bearer ${SERVICE_ROLE_KEY}` },
+    }
+  );
+}
+
+export async function clearAllLessonProgress(userId: string): Promise<void> {
+  await fetch(
+    `${SUPABASE_URL}/rest/v1/lesson_progress?user_id=eq.${userId}`,
+    {
+      method: "DELETE",
+      headers: { apikey: SERVICE_ROLE_KEY, Authorization: `Bearer ${SERVICE_ROLE_KEY}` },
+    }
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Platform stats helpers
+// ---------------------------------------------------------------------------
+
+export async function getPlatformStats(): Promise<Record<string, unknown>> {
+  const res = await fetch(
+    `${SUPABASE_URL}/rest/v1/platform_stats?select=*`,
+    {
+      headers: { apikey: SERVICE_ROLE_KEY, Authorization: `Bearer ${SERVICE_ROLE_KEY}` },
+    }
+  );
+  const rows = (await res.json()) as Array<Record<string, unknown>>;
+  return rows[0] ?? {};
 }

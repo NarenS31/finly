@@ -7,7 +7,7 @@
 # Test info
 
 - Name: profile.spec.ts >> Profile — authenticated >> updated display name persists after page refresh
-- Location: tests/e2e/profile.spec.ts:76:7
+- Location: tests/e2e/profile.spec.ts:78:18
 
 # Error details
 
@@ -112,12 +112,12 @@ Call log:
   81  |     });
   82  | 
   83  |     await page.goto("/profile");
-> 84  |     await expect(page.getByText(/RefreshCheck/i)).toBeVisible({ timeout: 8_000 });
-      |                                                   ^ Error: expect(locator).toBeVisible() failed
+  84  |     await expect(page.getByText(/RefreshCheck/i)).toBeVisible({ timeout: 8_000 });
   85  |   });
   86  | 
   87  |   test("profile PATCH API updates age tier", async ({ page }) => {
-  88  |     await loginViaUI(page, email, TEST_PASSWORD);
+> 88  |     await loginViaUI(page, email, TEST_PASSWORD);
+      |                                                              ^ Error: expect(locator).toBeVisible() failed
   89  | 
   90  |     const response = await page.request.patch("/api/profile", {
   91  |       data: { age_tier: "8-12" },

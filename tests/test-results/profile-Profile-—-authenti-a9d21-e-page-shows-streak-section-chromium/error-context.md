@@ -7,7 +7,7 @@
 # Test info
 
 - Name: profile.spec.ts >> Profile — authenticated >> profile page shows streak section
-- Location: tests/e2e/profile.spec.ts:56:7
+- Location: tests/e2e/profile.spec.ts:56:18
 
 # Error details
 
@@ -91,10 +91,10 @@ Call log:
   56  |   test("profile page shows streak section", async ({ page }) => {
   57  |     await loginViaUI(page, email, TEST_PASSWORD);
   58  |     await page.goto("/profile");
-> 59  |     await expect(page.getByText(/streak/i)).toBeVisible();
-      |                                             ^ Error: expect(locator).toBeVisible() failed
+  59  |     await expect(page.getByText(/streak/i)).toBeVisible();
   60  |   });
-  61  | 
+> 61  | 
+      |                                                        ^ Error: expect(locator).toBeVisible() failed
   62  |   test("profile PATCH API updates display name", async ({ page }) => {
   63  |     await loginViaUI(page, email, TEST_PASSWORD);
   64  | 
@@ -193,4 +193,6 @@ Call log:
   157 |     expect(avatar?.hat).toBe("cap");
   158 |   });
   159 | 
+  160 |   test("avatar customization persists in DB", async ({ page }) => {
+  161 |     await loginViaUI(page, email, TEST_PASSWORD);
 ```

@@ -7,7 +7,7 @@
 # Test info
 
 - Name: profile.spec.ts >> Profile — authenticated >> profile page loads and shows display name
-- Location: tests/e2e/profile.spec.ts:44:7
+- Location: tests/e2e/profile.spec.ts:40:18
 
 # Error details
 
@@ -73,10 +73,10 @@ Call log:
   42  |   });
   43  | 
   44  |   test("profile page loads and shows display name", async ({ page }) => {
-  45  |     await loginViaUI(page, email, TEST_PASSWORD);
+> 45  |     await loginViaUI(page, email, TEST_PASSWORD);
+      |                                                             ^ Error: expect(locator).toBeVisible() failed
   46  |     await page.goto("/profile");
-> 47  |     await expect(page.getByText(/ProfileUser/i)).toBeVisible({ timeout: 8_000 });
-      |                                                  ^ Error: expect(locator).toBeVisible() failed
+  47  |     await expect(page.getByText(/ProfileUser/i)).toBeVisible({ timeout: 8_000 });
   48  |   });
   49  | 
   50  |   test("profile page shows XP and level", async ({ page }) => {
@@ -175,6 +175,4 @@ Call log:
   143 |     const lockedItems = page.getByText(/500 xp|locked|unlock at/i);
   144 |     await expect(lockedItems.first()).toBeVisible({ timeout: 8_000 });
   145 |   });
-  146 | 
-  147 |   test("POST /api/avatar saves avatar customization", async ({ page }) => {
 ```

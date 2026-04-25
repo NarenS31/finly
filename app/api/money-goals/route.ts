@@ -62,6 +62,14 @@ export async function DELETE(req: Request) {
   if (!auth.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { id } = (await req.json()) as { id: string };
-  await supabase.from("money_goals").delete().eq("id", id).eq("user_id", auth.user.id);
+  const { count, error } = await supabase
+    .from("money_goals")
+    .delete()
+    .eq("id", id)
+    .eq("user_id", auth.user.id)
+    .select()
+    .then((res) => ({ count: res.data?.length ?? 0, error: res.error }));
+  if (error) return NextResponse.json({ error: error.message }, { status: 400 });
+  if (!count) return NextResponse.json({ error: "Goal not found" }, { status: 404 });
   return NextResponse.json({ ok: true });
 }

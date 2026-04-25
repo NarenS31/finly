@@ -7,7 +7,7 @@
 # Test info
 
 - Name: simulator.spec.ts >> Spending Simulator — public access >> simulator tracks happiness and savings metrics
-- Location: tests/e2e/simulator.spec.ts:51:7
+- Location: tests/e2e/simulator.spec.ts:72:18
 
 # Error details
 
@@ -154,8 +154,7 @@ Call log:
   54  |     // Should show happiness and/or savings meters
   55  |     await expect(
   56  |       page.getByText(/happiness|savings|balance|score/i).first()
-> 57  |     ).toBeVisible({ timeout: 8_000 });
-      |       ^ Error: expect(locator).toBeVisible() failed
+  57  |     ).toBeVisible({ timeout: 8_000 });
   58  |   });
   59  | 
   60  |   test("completing all 5 scenarios shows grade report", async ({ page }) => {
@@ -176,7 +175,8 @@ Call log:
   75  |       await page.waitForTimeout(200);
   76  | 
   77  |       // Click Next or See Results
-  78  |       const nextBtn = page.getByRole("button", { name: /next →|see results →/i });
+> 78  |       const nextBtn = page.getByRole("button", { name: /next →|see results →/i });
+      |                                                                                         ^ Error: expect(locator).toBeVisible() failed
   79  |       const nextVisible = await nextBtn.isVisible({ timeout: 3_000 }).catch(() => false);
   80  |       if (nextVisible) await nextBtn.click();
   81  |       await page.waitForTimeout(200);

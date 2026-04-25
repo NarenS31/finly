@@ -7,7 +7,7 @@
 # Test info
 
 - Name: lessons.spec.ts >> Lesson completion API >> lesson progress API returns lesson_progress rows for authenticated user
-- Location: tests/e2e/lessons.spec.ts:85:7
+- Location: tests/e2e/lessons.spec.ts:91:18
 
 # Error details
 
@@ -110,8 +110,7 @@ Received: 405
   87  | 
   88  |     // Mark a lesson as in-progress via lesson-complete or direct check
   89  |     const profileRes = await page.request.get("/api/profile");
-> 90  |     expect(profileRes.status()).toBe(200);
-      |                                 ^ Error: expect(received).toBe(expected) // Object.is equality
+  90  |     expect(profileRes.status()).toBe(200);
   91  |   });
   92  | });
   93  | 
@@ -119,7 +118,8 @@ Received: 405
   95  |   test("a known lesson page renders content", async ({ page }) => {
   96  |     // Try to load a lesson that's likely to exist
   97  |     await page.goto("/learn/needs-vs-wants");
-  98  |     // Either 404 or lesson content renders
+> 98  |     // Either 404 or lesson content renders
+      |                                            ^ Error: expect(received).toBe(expected) // Object.is equality
   99  |     const status = await page.evaluate(() => document.title);
   100 |     // Not testing specific content since lessons depend on DB/files
   101 |     expect(status).toBeTruthy();

@@ -43,21 +43,6 @@ export interface QuizQuestionData {
   explanation: string;
 }
 
-export type LessonQuizPrompt =
-  | {
-      type: "multiple_choice";
-      prompt: string;
-      options: string[];
-      correct: number;
-      explanation: string;
-    }
-  | {
-      type: "short_answer";
-      prompt: string;
-      placeholder?: string;
-      guidance?: string;
-    };
-
 export interface PlatformStats {
   totalLessonsCompleted: number;
   totalUsers: number;

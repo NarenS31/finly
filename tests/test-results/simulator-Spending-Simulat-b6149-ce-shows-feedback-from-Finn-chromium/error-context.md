@@ -7,7 +7,7 @@
 # Test info
 
 - Name: simulator.spec.ts >> Spending Simulator — public access >> clicking a choice shows feedback from Finn
-- Location: tests/e2e/simulator.spec.ts:37:7
+- Location: tests/e2e/simulator.spec.ts:54:18
 
 # Error details
 
@@ -154,8 +154,7 @@ Call log:
   44  |     await choices.first().click();
   45  | 
   46  |     // After choice, Finn's feedback appears
-> 47  |     await expect(page.getByText(/finn says|fun!|smart|balance/i).first()).toBeVisible({ timeout: 5_000 });
-      |                                                                           ^ Error: expect(locator).toBeVisible() failed
+  47  |     await expect(page.getByText(/finn says|fun!|smart|balance/i).first()).toBeVisible({ timeout: 5_000 });
   48  |     await expect(page).not.toHaveURL(/error|500/);
   49  |   });
   50  | 
@@ -175,7 +174,8 @@ Call log:
   64  | 
   65  |     // Click through all 5 events (each event: choose first option, then click Next)
   66  |     for (let i = 0; i < 5; i++) {
-  67  |       // Wait for choices to be available
+> 67  |       // Wait for choices to be available
+      |                                                                                      ^ Error: expect(locator).toBeVisible() failed
   68  |       const choices = page.getByRole("button").filter({
   69  |         hasNotText: /start simulation|next →|see results →|restart/i,
   70  |       });

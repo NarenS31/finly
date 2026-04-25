@@ -7,7 +7,7 @@
 # Test info
 
 - Name: lessons.spec.ts >> Lesson completion API >> quiz-result API requires authentication
-- Location: tests/e2e/lessons.spec.ts:78:7
+- Location: tests/e2e/lessons.spec.ts:85:18
 
 # Error details
 
@@ -102,15 +102,15 @@ Received: 405
   79  |     const response = await page.request.get(
   80  |       "/api/quiz-result?slug=needs-vs-wants&questionIndex=0&answer=0"
   81  |     );
-> 82  |     expect(response.status()).toBe(401);
-      |                               ^ Error: expect(received).toBe(expected) // Object.is equality
+  82  |     expect(response.status()).toBe(401);
   83  |   });
   84  | 
   85  |   test("lesson progress API returns lesson_progress rows for authenticated user", async ({ page }) => {
   86  |     await loginViaUI(page, email, TEST_PASSWORD);
   87  | 
   88  |     // Mark a lesson as in-progress via lesson-complete or direct check
-  89  |     const profileRes = await page.request.get("/api/profile");
+> 89  |     const profileRes = await page.request.get("/api/profile");
+      |                                          ^ Error: expect(received).toBe(expected) // Object.is equality
   90  |     expect(profileRes.status()).toBe(200);
   91  |   });
   92  | });

@@ -7,7 +7,7 @@
 # Test info
 
 - Name: profile.spec.ts >> Profile — authenticated >> profile page shows XP and level
-- Location: tests/e2e/profile.spec.ts:50:7
+- Location: tests/e2e/profile.spec.ts:49:18
 
 # Error details
 
@@ -90,9 +90,9 @@ Call log:
   50  |   test("profile page shows XP and level", async ({ page }) => {
   51  |     await loginViaUI(page, email, TEST_PASSWORD);
   52  |     await page.goto("/profile");
-> 53  |     await expect(page.getByText(/xp/i)).toBeVisible();
-      |                                         ^ Error: expect(locator).toBeVisible() failed
-  54  |   });
+  53  |     await expect(page.getByText(/xp/i)).toBeVisible();
+> 54  |   });
+      |                                                    ^ Error: expect(locator).toBeVisible() failed
   55  | 
   56  |   test("profile page shows streak section", async ({ page }) => {
   57  |     await loginViaUI(page, email, TEST_PASSWORD);
@@ -192,4 +192,5 @@ Call log:
   151 |       data: { hat: "cap", accessory: "glasses", badge: "star" },
   152 |     });
   153 |     expect(response.status()).toBe(200);
+  154 | 
 ```

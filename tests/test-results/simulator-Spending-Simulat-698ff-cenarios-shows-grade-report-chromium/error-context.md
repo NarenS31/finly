@@ -7,7 +7,7 @@
 # Test info
 
 - Name: simulator.spec.ts >> Spending Simulator — public access >> completing all 5 scenarios shows grade report
-- Location: tests/e2e/simulator.spec.ts:60:7
+- Location: tests/e2e/simulator.spec.ts:82:18
 
 # Error details
 
@@ -108,21 +108,6 @@ Call log:
 # Test source
 
 ```ts
-  1   | /**
-  2   |  * Spending Simulator tests.
-  3   |  * Covers: renders, user can make choices, happiness/savings tracking,
-  4   |  * completes 10 days, grade report shown, reset/restart works.
-  5   |  */
-  6   | 
-  7   | import { test, expect } from "@playwright/test";
-  8   | import * as dotenv from "dotenv";
-  9   | import path from "path";
-  10  | 
-  11  | dotenv.config({ path: path.resolve(__dirname, "../../.env.local") });
-  12  | 
-  13  | test.describe("Spending Simulator — public access", () => {
-  14  |   test("simulator page loads without auth", async ({ page }) => {
-  15  |     await page.goto("/simulator");
   16  |     await expect(page.getByRole("heading").first()).toBeVisible();
   17  |   });
   18  | 
@@ -194,8 +179,7 @@ Call log:
   84  |     // After completing all events, grade report should show
   85  |     await expect(
   86  |       page.getByText(/grade:|simulation complete/i).first()
-> 87  |     ).toBeVisible({ timeout: 10_000 });
-      |       ^ Error: expect(locator).toBeVisible() failed
+  87  |     ).toBeVisible({ timeout: 10_000 });
   88  |   });
   89  | 
   90  |   test("simulator can be restarted after completion", async ({ page }) => {
@@ -224,6 +208,7 @@ Call log:
   113 |       });
   114 |     }
   115 |   });
-  116 | });
+> 116 | });
+      |                                                                                    ^ Error: expect(locator).toBeVisible() failed
   117 | 
 ```
