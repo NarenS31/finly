@@ -7,16 +7,15 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ProgressBar } from "@/components/lesson/progress-bar";
-import type { LessonQuizPrompt } from "@/types";
+import type { QuizQuestionData } from "@/types";
 
-export function EpfQuestionsClient({
   slug,
   title,
   questions,
 }: {
   slug: string;
   title: string;
-  questions: LessonQuizPrompt[];
+  questions: QuizQuestionData[];
 }) {
   const router = useRouter();
   const [index, setIndex] = useState(0);
