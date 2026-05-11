@@ -9,6 +9,7 @@ import { Card } from "@/components/ui/card";
 import { ProgressBar } from "@/components/lesson/progress-bar";
 import type { QuizQuestionData } from "@/types";
 
+export default function EpfQuestionsClient({
   slug,
   title,
   questions,
